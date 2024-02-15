@@ -36,10 +36,10 @@ class Test(Base):
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
 
 
-def test_db():
-    Base.metadata.create_all(bind=db_engine())
-    test = Test(id=2)
-    db = db_session()
-    db.add(test)
-    db.commit()
-test_db()
+# def test_db():
+#     Base.metadata.create_all(bind=db_engine())
+#     test = Test(id=2)
+#     db = db_session()
+#     db.add(test)
+#     db.commit()
+# test_db()
