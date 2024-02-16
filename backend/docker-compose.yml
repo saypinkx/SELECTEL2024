@@ -17,6 +17,6 @@ services:
       - .env-prod
     container_name: app
     ports:
-      - 5500:8000
+      - 5500:5500
     depends_on:
       - db
