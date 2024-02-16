@@ -7,6 +7,9 @@ services:
       - .env-prod
     volumes:
       - /postgres:/data_db
+    environment:
+      POSTGRES_PASSWORD: password
+
   app:
     build:
       context: .
