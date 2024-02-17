@@ -3,12 +3,15 @@ services:
   db:
     image: postgres:15
     container_name: db
+    ports:
+      - 5432:5432
     env_file:
       - .env-prod
     volumes:
       - /postgres:/data_db
     environment:
       POSTGRES_PASSWORD: password
+
 
   app:
     build:
