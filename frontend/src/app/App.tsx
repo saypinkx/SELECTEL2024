@@ -3,8 +3,8 @@ import { TelegramWebApp } from 'react-telegram-webapp';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { AppViewModel } from './AppViewModel';
 import { Login } from '../pages';
-import './App.css';
 import { ThemeProvider, ToasterProvider } from '@gravity-ui/uikit';
+import './App.css';
 
 async function validateHash() {
     return true;
