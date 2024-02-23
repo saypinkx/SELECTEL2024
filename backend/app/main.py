@@ -3,15 +3,15 @@ from typing import Annotated
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn
 from database import Test, db_session, db_engine
-from models import Base
+from models import zxc
 from routers.donation import router
 from database import Db
 
 app = FastAPI()
 
 app.include_router(router)
-
-Base.metadata.create_all(bind=db_engine())
+zxc.metadata.drop_all(bind=db_engine())
+zxc.metadata.create_all(bind=db_engine())
 @app.on_event("startup")
 def on_startup():
    print('startup')

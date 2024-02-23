@@ -1,12 +1,14 @@
 from database import Base
-from sqlalchemy import ForeignKey, Table, Column, Integer, LargeBinary
+from sqlalchemy import ForeignKey, Table, Column, Integer, LargeBinary, String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy_file import FileField
 
 zxc = Base
 Donation = Table('Donation', zxc.metadata,
                  Column('id', Integer, autoincrement=True, primary_key=True),
-                 Column('certificate', FileField), extend_existing=True
+                 Column('type_donation', String), Column('date', String), Column('is_stationary', Boolean),
+                 Column('location', String), Column('centre', String),
+                 Column('certificate', String, nullable=True), Column('type_price', String), extend_existing=True
                  )
 
 

@@ -1,12 +1,11 @@
 from pydantic import BaseModel
 
 
-
-class Donation(BaseModel):
+class DonationCreate(BaseModel):
     type_donation: str
     date: str
     type_price: str
-    is_stationary: str
+    is_stationary: bool
     location: str
     centre: str
 
