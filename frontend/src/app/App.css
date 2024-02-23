@@ -1,0 +1,10 @@
+@import '@gravity-ui/uikit/styles/fonts.css';
+@import '@gravity-ui/uikit/styles/styles.css';
+
+.g-root {
+    --g-color-base-brand: #f73232;
+    --g-color-base-brand-hover: #b52828;
+    --g-color-line-brand: #f73232;
+    --g-color-text-brand: #f73232;
+    --g-color-text-brand-contrast: #fff;
+}

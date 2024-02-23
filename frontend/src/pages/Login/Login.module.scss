@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 400px;
+    margin-inline: auto;
+    align-items: center;
+    width: 370px;
+}
+
+.logo {
+    max-width: 180px;
+    max-height: 180px;
+    margin-block: 60px;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+}
+
+.inputs {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

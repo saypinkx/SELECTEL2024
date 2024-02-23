@@ -1,14 +1,27 @@
 import { view } from '@yoskutik/react-vvm';
+import { TelegramWebApp } from 'react-telegram-webapp';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { AppViewModel } from './AppViewModel';
+import { Login } from '../pages';
+import { ThemeProvider, ToasterProvider } from '@gravity-ui/uikit';
+import './App.css';
 
-
-export const App = view(AppViewModel)(({viewModel}) => {
-  return (
-      <div>
-          <div>Counter {viewModel.counter}</div>
-          <button onClick={viewModel.click}>click me</button>
-          <pre>{viewModel.result}</pre>
-      </div>
-  );
+async function validateHash() {
+    return true;
 }
-);
+
+export const App = view(AppViewModel)(() => {
+    return (
+        <TelegramWebApp validateHash={validateHash}>
+            <ThemeProvider theme="light">
+                <ToasterProvider>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route index element={<Login />} />
+                        </Routes>
+                    </BrowserRouter>
+                </ToasterProvider>
+            </ThemeProvider>
+        </TelegramWebApp>
+    );
+});
