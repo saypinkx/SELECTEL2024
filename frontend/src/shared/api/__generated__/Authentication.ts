@@ -9,40 +9,40 @@
  * ---------------------------------------------------------------
  */
 
-import { Service } from "typedi";
-import { User } from "./data-contracts";
-import { ContentType, HttpClient, RequestParams } from "./http-client";
+import Container, { Service } from 'typedi';
+import { User } from './data-contracts';
+import { ContentType, HttpClient, RequestParams } from './http-client';
 
 @Service()
 export class AuthenticationApi<SecurityDataType = unknown> {
-  http: HttpClient<SecurityDataType>;
-  constructor(http: HttpClient<SecurityDataType>) {
-    this.http = http;
-  }
+    http: HttpClient<SecurityDataType>;
+    constructor(http: HttpClient<SecurityDataType>) {
+        this.http = Container.get(HttpClient) as HttpClient<SecurityDataType>;
+    }
 
-  /**
-   * @description Authenticates a user with a username and password. Handles email and phone number formats for usernames.
-   *
-   * @tags Authentication
-   * @name AuthLoginCreate
-   * @summary User Login
-   * @request POST:/api/auth/login/
-   * @secure
-   */
-  authLoginCreate = (
-    data: {
-      password: string;
-      username: string;
-    },
-    params: RequestParams = {},
-  ) =>
-    this.http.request<User, any>({
-      path: `/api/auth/login/`,
-      method: "POST",
-      body: data,
-      secure: true,
-      type: ContentType.Json,
-      format: "json",
-      ...params,
-    });
+    /**
+     * @description Authenticates a user with a username and password. Handles email and phone number formats for usernames.
+     *
+     * @tags Authentication
+     * @name AuthLoginCreate
+     * @summary User Login
+     * @request POST:/api/auth/login/
+     * @secure
+     */
+    authLoginCreate = (
+        data: {
+            password: string;
+            username: string;
+        },
+        params: RequestParams = {},
+    ) =>
+        this.http.request<User, any>({
+            path: `/api/auth/login/`,
+            method: 'POST',
+            body: data,
+            secure: true,
+            type: ContentType.Json,
+            format: 'json',
+            ...params,
+        });
 }
