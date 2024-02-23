@@ -15,7 +15,7 @@ services:
   app:
     build:
       context: ./app
-      dockerfile: Dockerfile
+      dockerfile: DockerfileAPP
     env_file:
       - .env-prod
     container_name: app
