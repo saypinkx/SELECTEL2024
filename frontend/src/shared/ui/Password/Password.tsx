@@ -1,5 +1,4 @@
-import { PasswordInputProps } from '@gravity-ui/components';
-import { TextInput } from '@gravity-ui/uikit';
+import { PasswordInput, PasswordInputProps } from '@gravity-ui/components';
 import { useState } from 'react';
 
 interface PasswordProps extends Omit<PasswordInputProps, 'errorMessage'> {
@@ -16,7 +15,7 @@ export const Password = (props: PasswordProps) => {
     };
 
     return (
-        <TextInput
+        <PasswordInput
             {...props}
             onBlur={onBlur}
             errorMessage={props.errorMessage}
