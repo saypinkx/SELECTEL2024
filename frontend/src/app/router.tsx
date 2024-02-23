@@ -2,6 +2,7 @@ import { Navigate, Route, Routes, createRoutesFromElements, useLocation } from '
 import { AuthPage, ProfilePage } from '../pages';
 import { childView } from '@yoskutik/react-vvm';
 import { AppViewModel } from './AppViewModel';
+import { DonationPage } from '../pages/Donation/Donation';
 
 const RequireAuth = childView<AppViewModel>()<{ children: JSX.Element }>(({
     viewModel,
@@ -16,6 +17,7 @@ const RequireAuth = childView<AppViewModel>()<{ children: JSX.Element }>(({
 });
 
 export const routes = createRoutesFromElements([
+    <Route path="/donation" element={<DonationPage />} />,
     <Route path="/auth" element={<AuthPage />} />,
     <Route
         index

@@ -2,15 +2,17 @@
 @import '@gravity-ui/uikit/styles/styles.css';
 
 .g-root {
-    --g-color-base-background: #F6F7F8;
+    --g-color-base-background: #f6f7f8;
     --g-color-base-brand: #f73232;
     --g-color-base-brand-hover: #b52828;
     --g-color-line-brand: #f73232;
     --g-color-text-brand: #f73232;
     --g-color-text-brand-contrast: #fff;
+    --g-color-base-selection: #ffb1b1;
 }
 
-body, #root{
+body,
+#root {
     width: 100%;
     margin: 0;
     height: 100vh;
