@@ -15,7 +15,7 @@ session = db_session()
 
 
 @router.post('/', status_code=201)
-def create_user(donation: Annotated[Donation, Body()], file: UploadFile = File()):
+def create_donation(donation: Annotated[Donation, Body()], file: UploadFile = File()):
     try:
         contents = file.file.read()
         with open(file.filename, 'wb') as f:
