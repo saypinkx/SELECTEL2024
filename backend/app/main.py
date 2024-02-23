@@ -4,9 +4,17 @@ from starlette.middleware.cors import CORSMiddleware
 import uvicorn
 from database import Test, db_session, db_engine
 from models import Base
-Base.metadata.create_all(bind=db_engine())
+from routers.donation import router
+from database import Db
 
 app = FastAPI()
+
+app.include_router(router)
+
+Base.metadata.create_all(bind=db_engine())
+@app.on_event("startup")
+def on_startup():
+   print('startup')
 
 
 app.add_middleware(
@@ -16,8 +24,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
 
 
 @app.get('/test1/')
