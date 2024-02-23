@@ -16,7 +16,7 @@ import { ContentType, HttpClient, RequestParams } from './http-client';
 @Service()
 export class AuthenticationApi<SecurityDataType = unknown> {
     http: HttpClient<SecurityDataType>;
-    constructor(http: HttpClient<SecurityDataType>) {
+    constructor() {
         this.http = Container.get(HttpClient) as HttpClient<SecurityDataType>;
     }
 
