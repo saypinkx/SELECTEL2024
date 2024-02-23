@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { TextBox } from '../../shared/ui';
 import { validate, password as passwordValidator } from '../../shared/lib/Validator';
 import * as styles from './Login.module.scss';
+import { PasswordInput } from '@gravity-ui/components';
 
 export const Login = () => {
     const [login, setLogin] = useState('');
@@ -39,13 +40,15 @@ export const Login = () => {
                     onChange={onChangeLogin}
                     size="xl"
                 />
-                <TextBox
+                <PasswordInput
+                    value={password}
+                    onUpdate={onChangePassword}
                     placeholder="Пароль"
                     pin="brick-brick"
-                    value={password}
-                    onChange={onChangePassword}
+                    validationState={passwordError ? 'invalid' : undefined}
                     errorMessage={passwordError}
                     size="xl"
+                    showRevealButton
                 />
             </div>
             <Button view="action" pin="brick-brick" width="max" size="l" onClick={onLogin}>
