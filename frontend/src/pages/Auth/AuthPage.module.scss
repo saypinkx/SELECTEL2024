@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 400px;
+    margin-inline: auto;
+    align-items: center;
+    width: 370px;
+}
+
+.logo {
+    max-width: 180px;
+    max-height: 180px;
+    margin-block: 60px;
+}
+
+.tabs{
+    width: 370px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    justify-items: center;
+
+    :global(.g-tabs__item){
+        width: 100%;
+        margin-inline: 0;
+        display: flex;
+        justify-content: center;
+    }
+}

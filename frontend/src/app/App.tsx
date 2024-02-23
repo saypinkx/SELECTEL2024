@@ -1,27 +1,31 @@
 import { view } from '@yoskutik/react-vvm';
-import { TelegramWebApp } from 'react-telegram-webapp';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+// import { TelegramWebApp } from 'react-telegram-webapp';
 import { AppViewModel } from './AppViewModel';
-import { Login } from '../pages';
-import { ThemeProvider, ToasterProvider } from '@gravity-ui/uikit';
+import { ThemeProvider, ToasterComponent, ToasterProvider } from '@gravity-ui/uikit';
 import './App.css';
+import { routes } from './router';
+import { useMemo } from 'react';
+import Container from 'typedi';
+import { RouterService } from '../services';
+import { RouterProvider } from 'react-router-dom';
 
-async function validateHash() {
-    return true;
-}
+// async function validateHash() {
+//     return true;
+// }
 
 export const App = view(AppViewModel)(() => {
+    const router = useMemo(() => {
+        return Container.get(RouterService).init(routes);
+    }, []);
+
     return (
-        <TelegramWebApp validateHash={validateHash}>
-            <ThemeProvider theme="light">
-                <ToasterProvider>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route index element={<Login />} />
-                        </Routes>
-                    </BrowserRouter>
-                </ToasterProvider>
-            </ThemeProvider>
-        </TelegramWebApp>
+        // <TelegramWebApp validateHash={validateHash}>
+        <ThemeProvider theme="light">
+            <ToasterProvider>
+                <RouterProvider router={router} />
+                <ToasterComponent />
+            </ToasterProvider>
+        </ThemeProvider>
+        // </TelegramWebApp>
     );
 });

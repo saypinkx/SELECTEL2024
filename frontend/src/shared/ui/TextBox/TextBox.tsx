@@ -1,5 +1,5 @@
 import { TextInput, TextInputProps } from '@gravity-ui/uikit';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 interface TextBoxProps extends Omit<TextInputProps, 'onChange' | 'errorMessage'> {
     onChange?: (value: string) => void;
@@ -7,9 +7,17 @@ interface TextBoxProps extends Omit<TextInputProps, 'onChange' | 'errorMessage'>
 }
 
 export const TextBox = (props: TextBoxProps) => {
+    const [touched, setTouched] = useState(false);
+
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
         props.onChange?.(newValue);
+    };
+
+    const onBlur = () => {
+        if (!touched) {
+            setTouched(true);
+        }
     };
 
     return (
@@ -17,8 +25,9 @@ export const TextBox = (props: TextBoxProps) => {
             value={props.value}
             {...props}
             onChange={onChange}
-            validationState={props.errorMessage ? 'invalid' : undefined}
+            onBlur={onBlur}
             errorMessage={props.errorMessage}
+            validationState={touched && props.errorMessage ? 'invalid' : undefined}
         />
     );
 };
