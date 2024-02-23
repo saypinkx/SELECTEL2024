@@ -2,7 +2,7 @@ from fastapi import FastAPI, Path
 from typing import Annotated
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn
-from backend.db.settings import Test, db_session
+from database import Test, db_session
 
 app = FastAPI()
 
