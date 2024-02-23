@@ -5,12 +5,14 @@ import { Password, TextBox } from '../../../../shared/ui';
 import * as styles from '../Registration.module.scss';
 
 export const EnterDataBlock = childView<RegistrationViewModel>()(({ viewModel }) => (
-    <div className={styles.block}>
+    <form className={styles.block}>
         <div className={styles.inputs}>
             <TextBox
                 size="xl"
                 pin="round-round"
+                autoFocus
                 disabled={viewModel.isLoading}
+                type={viewModel.registrationType === 'email' ? 'email' : 'tel'}
                 placeholder={viewModel.registrationType === 'email' ? 'Email' : 'Телефон'}
                 value={viewModel.registrationType === 'email' ? viewModel.email : viewModel.phone}
                 errorMessage={
@@ -49,11 +51,12 @@ export const EnterDataBlock = childView<RegistrationViewModel>()(({ viewModel })
             pin="round-round"
             width="max"
             size="xl"
+            type="submit"
             disabled={viewModel.hasErrors}
             onClick={viewModel.onRegister}
             loading={viewModel.isLoading}
         >
             Зарегистрироваться
         </Button>
-    </div>
+    </form>
 ));

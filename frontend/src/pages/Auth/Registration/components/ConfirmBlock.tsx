@@ -5,7 +5,7 @@ import { Button } from '@gravity-ui/uikit';
 import * as styles from '../Registration.module.scss';
 
 export const ConfirmBlock = childView<RegistrationViewModel>()(({ viewModel }) => (
-    <div className={styles.block}>
+    <form className={styles.block}>
         <div className={styles.inputs}>
             <TextBox
                 placeholder="Код подтверждения"
@@ -15,6 +15,7 @@ export const ConfirmBlock = childView<RegistrationViewModel>()(({ viewModel }) =
                 errorMessage={viewModel.confirmCodeError}
                 disabled={viewModel.isLoading}
                 size="xl"
+                autoFocus
             />
         </div>
         <Button
@@ -22,11 +23,12 @@ export const ConfirmBlock = childView<RegistrationViewModel>()(({ viewModel }) =
             pin="round-round"
             width="max"
             size="xl"
+            type="submit"
             disabled={viewModel.hasErrors}
             loading={viewModel.isLoading}
             onClick={viewModel.onSendConfirmCode}
         >
             Войти в личный кабинет
         </Button>
-    </div>
+    </form>
 ));

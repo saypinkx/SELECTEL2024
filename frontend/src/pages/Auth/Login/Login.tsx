@@ -6,7 +6,7 @@ import { LoginViewModel } from './LoginViewModel';
 
 export const Login = view(LoginViewModel)(({ viewModel }) => {
     return (
-        <div className={styles.container}>
+        <form className={styles.container}>
             <div className={styles.inputs}>
                 <TextBox
                     placeholder="Номер телефона или Email"
@@ -15,6 +15,7 @@ export const Login = view(LoginViewModel)(({ viewModel }) => {
                     onChange={viewModel.onChangeLogin}
                     errorMessage={viewModel.loginError}
                     disabled={viewModel.isLoading}
+                    autoFocus
                     size="xl"
                 />
                 <Password
@@ -37,9 +38,10 @@ export const Login = view(LoginViewModel)(({ viewModel }) => {
                 onClick={viewModel.onLogin}
                 loading={viewModel.isLoading}
                 disabled={viewModel.hasErrors}
+                type="submit"
             >
                 Войти
             </Button>
-        </div>
+        </form>
     );
 });
