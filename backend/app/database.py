@@ -31,6 +31,7 @@ def db_engine():
 Base = declarative_base()
 
 
+
 class Test(Base):
     __tablename__ = 'test_db'
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)

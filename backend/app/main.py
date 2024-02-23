@@ -2,9 +2,12 @@ from fastapi import FastAPI, Path
 from typing import Annotated
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn
-from database import Test, db_session
+from database import Test, db_session, db_engine
+from models import Base
+Base.metadata.create_all(bind=db_engine())
 
 app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -14,8 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=5500)
+
 
 
 @app.get('/test1/')
@@ -33,3 +35,7 @@ def test_db():
     db = db_session()
     test = db.get(Test, 1)
     return test
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=5500)
