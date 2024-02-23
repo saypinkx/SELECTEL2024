@@ -12,6 +12,8 @@ export const ConfirmBlock = childView<RegistrationViewModel>()(({ viewModel }) =
                 pin="round-round"
                 value={viewModel.confirmCode}
                 onChange={viewModel.onChangeConfirmCode}
+                errorMessage={viewModel.confirmCodeError}
+                disabled={viewModel.isLoading}
                 size="xl"
             />
         </div>
@@ -20,6 +22,8 @@ export const ConfirmBlock = childView<RegistrationViewModel>()(({ viewModel }) =
             pin="round-round"
             width="max"
             size="xl"
+            disabled={viewModel.hasErrors}
+            loading={viewModel.isLoading}
             onClick={viewModel.onSendConfirmCode}
         >
             Войти в личный кабинет

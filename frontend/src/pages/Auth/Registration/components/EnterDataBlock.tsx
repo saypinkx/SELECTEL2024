@@ -10,8 +10,14 @@ export const EnterDataBlock = childView<RegistrationViewModel>()(({ viewModel })
             <TextBox
                 size="xl"
                 pin="round-round"
+                disabled={viewModel.isLoading}
                 placeholder={viewModel.registrationType === 'email' ? 'Email' : 'Телефон'}
                 value={viewModel.registrationType === 'email' ? viewModel.email : viewModel.phone}
+                errorMessage={
+                    viewModel.registrationType === 'email'
+                        ? viewModel.emailError
+                        : viewModel.phoneError
+                }
                 onChange={
                     viewModel.registrationType === 'email'
                         ? viewModel.onChangeEmail
@@ -21,11 +27,21 @@ export const EnterDataBlock = childView<RegistrationViewModel>()(({ viewModel })
             <Password
                 value={viewModel.password}
                 onUpdate={viewModel.onChangePassword}
+                errorMessage={viewModel.passwordError}
+                disabled={viewModel.isLoading}
                 placeholder="Пароль"
                 pin="round-round"
-                errorMessage={viewModel.passwordError}
                 size="xl"
                 showRevealButton
+            />
+            <TextBox
+                size="xl"
+                pin="round-round"
+                placeholder={'Имя'}
+                disabled={viewModel.isLoading}
+                value={viewModel.name}
+                onChange={viewModel.onChangeName}
+                errorMessage={viewModel.nameError}
             />
         </div>
         <Button
@@ -33,7 +49,9 @@ export const EnterDataBlock = childView<RegistrationViewModel>()(({ viewModel })
             pin="round-round"
             width="max"
             size="xl"
+            disabled={viewModel.hasErrors}
             onClick={viewModel.onRegister}
+            loading={viewModel.isLoading}
         >
             Зарегистрироваться
         </Button>
