@@ -20,19 +20,20 @@ dp.middleware.setup(LoggingMiddleware())
 # @dp.message_handler(Text(equals='s'))
 # @dp.message_handler(content_types=[types.ContentType.AUDIO])
 # @dp.message_handler(commands=)
+
 @dp.message_handler()
 async def start(message: types.Message):
     text = (
         f'Добро пожаловать в DonorSearch App!\nИспользуйте наше приложение для записи на донацию, отслеживания срочных запросов на кровь, просмотра журнала и многого другого')
     website_url1 = 'https://shorturl.at/eprEL'
-    url4 = 'https://shorturl.at/eprEL'
-    url0 = 'https://shorturl.at/fJY15'
+    url_help_project = 'https://donorsearch.org/donate/'
+
 
     keyboard = types.InlineKeyboardMarkup()
     handler_button0 = types.InlineKeyboardButton(text='🩸Мои донации', callback_data='my_donations')
     handler_button1 = types.InlineKeyboardButton(text='📌Cдать кровь', callback_data='donate_blood')
-    handler_button2 = types.InlineKeyboardButton(text='💌Журнал и события', callback_data='magazine_and_events')
-    handler_button3 = types.InlineKeyboardButton(text='💸Помощь проекту', web_app=WebAppInfo(url=url0))
+    handler_button2 = types.InlineKeyboardButton(text='💌Журнал и события', callback_data='magazine')
+    handler_button3 = types.InlineKeyboardButton(text='💸Помощь проекту', web_app=WebAppInfo(url=url_help_project))
     handler_button4 = types.InlineKeyboardButton(text='👤Mой профиль', callback_data='profile')
     keyboard.row(handler_button0, handler_button1)
     keyboard.row(handler_button2, handler_button3)
@@ -73,10 +74,11 @@ async def donate_blood(callback: types.CallbackQuery):
     website_url1 = 'https://shorturl.at/eprEL'
     url4 = 'https://shorturl.at/eprEL'
     url0 = 'https://shorturl.at/fJY15'
+    url_centers_blood = 'https://donorsearch.org/bloodstations/sankt-peterburg/'
 
     keyboard = types.InlineKeyboardMarkup()
-    handler_button0 = types.InlineKeyboardButton(text='🏥Центры крови', web_app=WebAppInfo(url=url0))
-    handler_button1 = types.InlineKeyboardButton(text='🚨Срочные заявки', web_app=WebAppInfo(url=url0))
+    handler_button0 = types.InlineKeyboardButton(text='🏥Центры крови', web_app=WebAppInfo(url=url_centers_blood))
+    handler_button1 = types.InlineKeyboardButton(text='🚨Срочные заявки', callback_data='null')
     handler_button2 = types.InlineKeyboardButton(text='🔖Памятка донора', callback_data='send_photo')
 
     keyboard.row(handler_button0, handler_button1)
@@ -84,38 +86,38 @@ async def donate_blood(callback: types.CallbackQuery):
     await callback.message.answer(text=text, reply_markup=keyboard)
 
 
-@dp.callback_query_handler(text='magazine_end_events')
+@dp.callback_query_handler(text='magazine')
 async def magazine_and_events(callback: types.CallbackQuery):
     text = (
         f'Регистрируйте здесь свои благотворительные поступки, добавляйте фото, планируйте будущие донорские акции, получайте информацию для подготовки и отслеживайте свой статус.')
-    website_url1 = 'https://shorturl.at/eprEL'
-    url0 = 'https://shorturl.at/fJY15'
 
+    url_states = 'https://journal.donorsearch.org/?utm_source=header&utm_medium=ds&utm_campaign=donor_search'
+    url_projects = 'https://unity.donorsearch.org/'
     keyboard = types.InlineKeyboardMarkup()
-    handler_button0 = types.InlineKeyboardButton(text='🎮Игры', web_app=WebAppInfo(url=url0))
-    handler_button1 = types.InlineKeyboardButton(text='📄Статьи', web_app=WebAppInfo(url=url0))
-    handler_button2 = types.InlineKeyboardButton(text='⭐️️Спецпроекты', web_app=WebAppInfo(url=website_url1))
+    handler_button0 = types.InlineKeyboardButton(text='🎮Игры', callback_data='null')
+    handler_button1 = types.InlineKeyboardButton(text='📄Статьи', web_app=WebAppInfo(url=url_states))
+    handler_button2 = types.InlineKeyboardButton(text='⭐️️Спецпроекты', web_app=WebAppInfo(url=url_projects))
 
     keyboard.row(handler_button0, handler_button1)
     keyboard.row(handler_button2)
     await callback.message.answer(text=text, reply_markup=keyboard)
 
 
-@dp.callback_query_handler(text='profile')
-async def magazine_and_events(callback: types.CallbackQuery):
-    text = (
-        f'Регистрируйте здесь свои благотворительные поступки, добавляйте фото, планируйте будущие донорские акции, получайте информацию для подготовки и отслеживайте свой статус.')
-    website_url1 = 'https://shorturl.at/eprEL'
-    url0 = 'https://shorturl.at/fJY15'
-
-    keyboard = types.InlineKeyboardMarkup()
-    handler_button0 = types.InlineKeyboardButton(text='🎮Игры', web_app=WebAppInfo(url=url0))
-    handler_button1 = types.InlineKeyboardButton(text='📄Статьи', web_app=WebAppInfo(url=url0))
-    handler_button2 = types.InlineKeyboardButton(text='⭐️️Спецпроекты', web_app=WebAppInfo(url=website_url1))
-
-    keyboard.row(handler_button0, handler_button1)
-    keyboard.row(handler_button2)
-    await callback.message.answer(text=text, reply_markup=keyboard)
+# @dp.callback_query_handler(text='profile')
+# async def profile(callback: types.CallbackQuery):
+#     text = (
+#         f'Регистрируйте здесь свои благотворительные поступки, добавляйте фото, планируйте будущие донорские акции, получайте информацию для подготовки и отслеживайте свой статус.')
+#     website_url1 = 'https://shorturl.at/eprEL'
+#     url0 = 'https://shorturl.at/fJY15'
+#
+#     keyboard = types.InlineKeyboardMarkup()
+#     handler_button0 = types.InlineKeyboardButton(text='🎮Игры', web_app=WebAppInfo(url=url0))
+#     handler_button1 = types.InlineKeyboardButton(text='📄Статьи', web_app=WebAppInfo(url=url0))
+#     handler_button2 = types.InlineKeyboardButton(text='⭐️️Спецпроекты', web_app=WebAppInfo(url=website_url1))
+#
+#     keyboard.row(handler_button0, handler_button1)
+#     keyboard.row(handler_button2)
+#     await callback.message.answer(text=text, reply_markup=keyboard)
 
 
 @dp.callback_query_handler(text='profile')
@@ -127,7 +129,7 @@ async def profile(callback: types.CallbackQuery):
     url0 = 'https://shorturl.at/fJY15'
 
     keyboard = types.InlineKeyboardMarkup()
-    handler_button0 = types.InlineKeyboardButton(text='🎖Статус почетного донора', web_app=WebAppInfo(url=url0))
+    handler_button0 = types.InlineKeyboardButton(text='🎖Статус почетного донора', callback_data='null')
     handler_button1 = types.InlineKeyboardButton(text='👤Вход или регистрация', web_app=WebAppInfo(url=url0))
     handler_button2 = types.InlineKeyboardButton(text='🎁Бонусы',
                                                  web_app=WebAppInfo(url=website_url1))
