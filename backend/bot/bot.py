@@ -139,6 +139,28 @@ async def profile(callback: types.CallbackQuery):
     await callback.message.answer(text=text, reply_markup=keyboard)
 
 
+#
+# @dp.callback_query_handler(text='send_photo')
+# async def profile(callback: types.CallbackQuery):
+#
+#     await bot.send_photo(chat_id=callback.message.chat.id,
+#                          photo='https://avatars.mds.yandex.net/i?id=c39b4a72a7e6228d38bf87fbe5744f6084ec8773-9052192-images-thumbs&n=13')
+#     await bot.send_photo(chat_id=callback.message.chat.id,
+#                          photo='https://avatars.mds.yandex.net/i?id=c39b4a72a7e6228d38bf87fbe5744f6084ec8773-9052192-images-thumbs&n=13')
+
+async def send_local_photo(chat_id, photo_path):
+    with open(photo_path, 'rb') as photo:
+        photo_data = types.InputFile(photo)
+        await bot.send_photo(chat_id, photo=photo_data)
+
+
+@dp.callback_query_handler(text='send_photo')
+async def profile(callback: types.CallbackQuery):
+    await send_local_photo(chat_id=callback.message.chat.id, photo_path=f'./files/one.jpg')
+    await send_local_photo(chat_id=callback.message.chat.id, photo_path=f'./files/two.jpg')
+    await send_local_photo(chat_id=callback.message.chat.id, photo_path=f'./files/three.jpg')
+
+
 async def main():
     await dp.start_polling(bot)
 
