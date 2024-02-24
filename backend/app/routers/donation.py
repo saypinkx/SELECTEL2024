@@ -1,7 +1,7 @@
-from ap.models import Donation
+from app.models import Donation
 from fastapi import APIRouter
 from database import db_session
-from ap.schemas.donation import DonationCreate
+from app.schemas.donation import DonationCreate
 from fastapi import APIRouter, Depends, Body, Path, HTTPException, Query, status
 from typing import Annotated
 from fastapi import File, UploadFile
