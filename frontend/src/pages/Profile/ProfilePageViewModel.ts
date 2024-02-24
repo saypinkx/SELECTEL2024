@@ -37,7 +37,7 @@ export class ProfilePageViewModel extends ViewModel {
         this.getCountriesList();
     }
 
-    private showSaveButton = () => {
+    showSaveButton = () => {
         Telegram.WebApp.MainButton.setParams({
             is_visible: true,
             color: '#27C175',
@@ -47,7 +47,7 @@ export class ProfilePageViewModel extends ViewModel {
         Telegram.WebApp.onEvent('mainButtonClicked', this.saveChanges);
     };
 
-    private hideSaveButton = () => {
+    hideSaveButton = () => {
         Telegram.WebApp.MainButton.hide();
         Telegram.WebApp.offEvent('mainButtonClicked', this.saveChanges);
     };
@@ -103,6 +103,8 @@ export class ProfilePageViewModel extends ViewModel {
         user.about = this.about;
 
         this.auth.setUserInfo(user);
+
+        Telegram.WebApp.showAlert('Изменения сохранены');
     };
 
     @action getCountriesList = () => {
