@@ -6,6 +6,7 @@ import * as styles from './AuthPage.module.scss';
 
 export const AuthPage = () => {
     const [activeTab, setActiveTab] = useState<'login' | 'reg'>('login');
+
     return (
         <div className={styles.container}>
             <img src="/logo.svg" className={styles.logo} />

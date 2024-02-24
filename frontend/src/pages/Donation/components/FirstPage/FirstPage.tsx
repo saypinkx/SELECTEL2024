@@ -7,6 +7,7 @@ import { runInAction } from 'mobx';
 import { dateTimeParse } from '@gravity-ui/date-utils';
 import { FirstPageViewModel } from './FirstPageViewModel';
 import styles from './FirstPage.module.scss';
+import { isTelegram } from '../../../../shared/lib';
 
 export const FirstPage = view(FirstPageViewModel)(({ viewModel }) => {
     useEffect(() => {
@@ -71,7 +72,7 @@ export const FirstPage = view(FirstPageViewModel)(({ viewModel }) => {
                 </div>
             </div>
 
-            {Telegram.WebApp.platform === 'unknown' && !viewModel.hasErrors && (
+            {!isTelegram() && !viewModel.hasErrors && (
                 <Button
                     view="action"
                     pin="round-round"

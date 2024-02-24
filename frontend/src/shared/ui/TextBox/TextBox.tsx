@@ -1,14 +1,18 @@
 import { TextInput, TextInputProps } from '@gravity-ui/uikit';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useId, useState } from 'react';
+import { LabelableContainer } from '../LabelableContainer';
 
 interface TextBoxProps extends Omit<TextInputProps, 'onChange' | 'errorMessage'> {
     onChange?: (value: string) => void;
     errorMessage?: string;
     alwaysShowError?: boolean;
+    label?: string;
 }
 
-export const TextBox = (props: TextBoxProps) => {
+export const TextBox = ({ label, size = 'xl', ...props }: TextBoxProps) => {
     const [touched, setTouched] = useState(false);
+
+    const id = useId();
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
@@ -22,10 +26,11 @@ export const TextBox = (props: TextBoxProps) => {
     };
 
     const showError = props.alwaysShowError || touched;
-
-    return (
+    const textbox = (
         <TextInput
+            id={id}
             value={props.value}
+            size={size}
             {...props}
             onChange={onChange}
             onBlur={onBlur}
@@ -33,4 +38,6 @@ export const TextBox = (props: TextBoxProps) => {
             validationState={showError && props.errorMessage ? 'invalid' : undefined}
         />
     );
+
+    return label ? <LabelableContainer label={label} children={textbox} /> : textbox;
 };

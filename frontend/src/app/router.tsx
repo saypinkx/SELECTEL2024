@@ -3,6 +3,7 @@ import { AuthPage, BonusPage, BonusesPage, ProfilePage } from '../pages';
 import { childView } from '@yoskutik/react-vvm';
 import { AppViewModel } from './AppViewModel';
 import { DonationPage } from '../pages/Donation/Donation';
+import { ChangePassword } from '../pages/ChangePassword/ChangePassword';
 
 const RequireAuth = childView<AppViewModel>()<{ children: JSX.Element }>(({
     viewModel,
@@ -17,9 +18,6 @@ const RequireAuth = childView<AppViewModel>()<{ children: JSX.Element }>(({
 });
 
 export const routes = createRoutesFromElements([
-    <Route path="/bonus" element={<BonusesPage />} />,
-    <Route path="/bonus/:id" element={<BonusPage />} />,
-    <Route path="/donation" element={<DonationPage />} />,
     <Route path="/auth" element={<AuthPage />} />,
     <Route
         index
@@ -27,7 +25,11 @@ export const routes = createRoutesFromElements([
         element={
             <RequireAuth>
                 <Routes>
+                    <Route path="/donation" element={<DonationPage />} />,
+                    <Route path="/profile/change-password" element={<ChangePassword />} />
                     <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/bonus/:id" element={<BonusPage />} />,
+                    <Route path="/bonus" element={<BonusesPage />} />,
                 </Routes>
             </RequireAuth>
         }
