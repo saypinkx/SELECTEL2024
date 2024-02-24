@@ -50,7 +50,9 @@ export class LoginViewModel extends ViewModel {
                 password: this.password,
             });
             this.auth.setUserInfo(user);
-            this.routes.router?.navigate('/profile');
+            Telegram.WebApp.showAlert('Пользователь успешно авторизован', () => {
+                Telegram.WebApp.close();
+            });
         } catch (error) {
             if (isApiError<'message'>(error)) {
                 this.loginError = error.response?.data.message ?? '';

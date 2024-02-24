@@ -117,7 +117,9 @@ export class RegistrationViewModel extends ViewModel {
 
             const user = await actionFn();
             this.auth.setUserInfo(user);
-            this.routes.router?.navigate('/profile');
+            Telegram.WebApp.showAlert('Пользователь успешно зарегистрирован', () => {
+                Telegram.WebApp.close();
+            });
         } catch (error) {
             runInAction(() => {
                 if (isApiError<'code'>(error)) {
