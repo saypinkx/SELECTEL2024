@@ -1,0 +1,61 @@
+.pageContent {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.pageHeader{
+    margin: 0;
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.search{
+    margin-bottom: 12px;
+}
+
+.bonusCards {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.bonusCard {
+    display: flex;
+    gap: 12px;
+    overflow: hidden;
+    height: 70px;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.bonusImage {
+    width: 33%;
+    object-fit: cover;
+}
+
+.bonusCardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
+}
+
+.bonusName,
+.bonusDate {
+    font-size: 10px;
+    margin: 0;
+}
+
+.bonusName {
+    font-size: 12px;
+}
+
+.loader {
+    margin-top: 20px;
+}
