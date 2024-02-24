@@ -38,5 +38,8 @@ class User(base):
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
     firstname: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str] = mapped_column()
+    email: Mapped[str] = mapped_column()
+    lastname: Mapped[str] = mapped_column()
+    patronym: Mapped[str] = mapped_column(nullable=True)
     tag: Mapped[str] = mapped_column(nullable=True)
     donations = relationship('Donation', uselist=True, secondary=Donation_User)
