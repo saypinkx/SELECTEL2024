@@ -2,7 +2,7 @@ import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import Container, { Service } from 'typedi';
 import { ViewModel } from '@yoskutik/react-vvm';
 import { AccountCreationAndConfirmationApi, isApiError } from '../../../shared/api';
-import { AuthService } from '../../../services';
+import { AuthService, RouterService } from '../../../services';
 
 @Service({ transient: true })
 export class RegistrationViewModel extends ViewModel {
@@ -35,11 +35,13 @@ export class RegistrationViewModel extends ViewModel {
 
     constructor(
         private regApi: AccountCreationAndConfirmationApi,
+        private routes: RouterService,
         private auth: AuthService,
     ) {
         super();
         makeObservable(this);
         this.regApi = Container.get(AccountCreationAndConfirmationApi);
+        this.routes = Container.get(RouterService);
         this.auth = Container.get(AuthService);
     }
 

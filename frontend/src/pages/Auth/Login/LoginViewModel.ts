@@ -1,7 +1,7 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import Container, { Service } from 'typedi';
 import { ViewModel } from '@yoskutik/react-vvm';
-import { AuthService } from '../../../services';
+import { AuthService, RouterService } from '../../../services';
 import { AuthenticationApi, isApiError } from '../../../shared/api';
 
 @Service({ transient: true })
@@ -21,11 +21,13 @@ export class LoginViewModel extends ViewModel {
     constructor(
         private auth: AuthService,
         private authApi: AuthenticationApi,
+        private routes: RouterService,
     ) {
         super();
         makeObservable(this);
         this.auth = Container.get(AuthService);
         this.authApi = Container.get(AuthenticationApi);
+        this.routes = Container.get(RouterService);
     }
 
     @action onChangeLogin = (value: string) => {

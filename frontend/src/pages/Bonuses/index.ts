@@ -1,3 +1,1 @@
-import { BonusesPage } from './Bonuses';
-
-export default BonusesPage;
+export { BonusesPage } from './Bonuses';
