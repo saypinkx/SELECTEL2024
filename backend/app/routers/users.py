@@ -73,7 +73,7 @@ def update_user(user_id: int,
     return db_item
 
 
-@user_router.post('/', status_code=201)
+@user_router.post('/login', status_code=201)
 def login(firstname: str, password: str):
     db = db_session()
     user_db = db.query(User).filter(
@@ -94,3 +94,4 @@ def delete_user(item_id: int):
     db.delete(db_item)
     db.commit()
     return {"message": "User deleted successfully"}
+
