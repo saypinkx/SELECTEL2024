@@ -2,14 +2,12 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-
-
 class UserRegister(BaseModel):
     email: str
     username: str
     password: str
     first_name: str
-    tags: str
+    tag: str
 
     class Config:
         orm_mode = True
@@ -20,7 +18,7 @@ class UserCreate(BaseModel):
     username: str
     password: str
     first_name: str
-    tags: str
+    tag: str
     last_name: Optional[str] = None
     patronym: Optional[str] = None
 
@@ -37,7 +35,6 @@ class UserResponse(BaseModel):
     id: int
     username: str
     first_name: str
-
 
     class Config:
         orm_mode = True
