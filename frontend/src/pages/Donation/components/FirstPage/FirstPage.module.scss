@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 400px;
+    padding: 20px;
+    align-items: center;
+    margin-inline: auto;
+}
+
+.pageHeader {
+    margin: 10px;
+}
+
+.block {
+    width: 100%;
+}
+
+.blockHeader {
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.tagsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}

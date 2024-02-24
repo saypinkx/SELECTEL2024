@@ -1,7 +1,6 @@
 import { computed, makeObservable, observable } from 'mobx';
-import Container, { Service } from 'typedi';
-import { AuthenticationApi, User, isApiError } from '../shared/api';
-import { Toaster } from '@gravity-ui/uikit';
+import { Service } from 'typedi';
+import { User } from '../shared/api';
 
 @Service()
 export class AuthService {
@@ -11,32 +10,11 @@ export class AuthService {
         return !!this.userInfo;
     }
 
-    constructor(
-        private authApi: AuthenticationApi,
-        private toaster: Toaster,
-    ) {
+    constructor() {
         makeObservable(this);
-        this.toaster = new Toaster();
-        this.authApi = Container.get(AuthenticationApi);
     }
 
-    public login = async (username: string, password: string) => {
-        try {
-            this.userInfo = await this.authApi.authLoginCreate({ username, password });
-        } catch (error) {
-            if (isApiError(error)) {
-                this.toaster.add({
-                    name: 'loginError',
-                    theme: 'danger',
-                    isClosable: true,
-                    title: 'Ошибка входа',
-                    content: error.response?.data.message,
-                });
-            }
-        }
-    };
-
-    public logout = async () => {
-        this.userInfo = null;
+    public setUserInfo = (user: User) => {
+        this.userInfo = user;
     };
 }

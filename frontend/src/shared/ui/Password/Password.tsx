@@ -1,9 +1,9 @@
-import { PasswordInputProps } from '@gravity-ui/components';
-import { TextInput } from '@gravity-ui/uikit';
+import { PasswordInput, PasswordInputProps } from '@gravity-ui/components';
 import { useState } from 'react';
 
 interface PasswordProps extends Omit<PasswordInputProps, 'errorMessage'> {
     errorMessage?: string;
+    alwaysShowError?: boolean
 }
 
 export const Password = (props: PasswordProps) => {
@@ -15,12 +15,14 @@ export const Password = (props: PasswordProps) => {
         }
     };
 
+    const showError = props.alwaysShowError || touched;
+
     return (
-        <TextInput
+        <PasswordInput
             {...props}
             onBlur={onBlur}
             errorMessage={props.errorMessage}
-            validationState={touched && props.errorMessage ? 'invalid' : undefined}
+            validationState={showError && props.errorMessage ? 'invalid' : undefined}
         />
     );
 };

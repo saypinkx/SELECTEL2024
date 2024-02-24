@@ -4,6 +4,7 @@ import { ChangeEvent, useState } from 'react';
 interface TextBoxProps extends Omit<TextInputProps, 'onChange' | 'errorMessage'> {
     onChange?: (value: string) => void;
     errorMessage?: string;
+    alwaysShowError?: boolean;
 }
 
 export const TextBox = (props: TextBoxProps) => {
@@ -20,6 +21,8 @@ export const TextBox = (props: TextBoxProps) => {
         }
     };
 
+    const showError = props.alwaysShowError || touched;
+
     return (
         <TextInput
             value={props.value}
@@ -27,7 +30,7 @@ export const TextBox = (props: TextBoxProps) => {
             onChange={onChange}
             onBlur={onBlur}
             errorMessage={props.errorMessage}
-            validationState={touched && props.errorMessage ? 'invalid' : undefined}
+            validationState={showError && props.errorMessage ? 'invalid' : undefined}
         />
     );
 };

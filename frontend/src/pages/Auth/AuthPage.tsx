@@ -25,7 +25,7 @@ export const AuthPage = () => {
                     },
                 ]}
             />
-            <div className={styles.tabContent}>
+            <div>
                 {activeTab === 'login' && <Login />}
                 {activeTab === 'reg' && <Registration />}
             </div>

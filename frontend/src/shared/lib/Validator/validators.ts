@@ -56,8 +56,7 @@ export const login: Validator = (value: string) => {
     return validate(value, minLength(3), atLeastOneLetter, maxLength(20));
 };
 
-export const password: Validator = (value: string) =>
-    validate(value, atLeastOneDigit, atLeastOneUpperLetter, minLength(8), maxLength(40));
+export const password: Validator = (value: string) => validate(value, minLength(8), maxLength(40));
 
 export const repeatPassword: (pass: string) => Validator = pass => (value: string) => ({
     isValid: value === pass,

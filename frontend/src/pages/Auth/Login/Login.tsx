@@ -6,13 +6,17 @@ import { LoginViewModel } from './LoginViewModel';
 
 export const Login = view(LoginViewModel)(({ viewModel }) => {
     return (
-        <div className={styles.container}>
+        <form className={styles.container}>
             <div className={styles.inputs}>
                 <TextBox
                     placeholder="Номер телефона или Email"
                     pin="round-round"
                     value={viewModel.login}
                     onChange={viewModel.onChangeLogin}
+                    errorMessage={viewModel.loginError}
+                    disabled={viewModel.isLoading}
+                    alwaysShowError
+                    autoFocus
                     size="xl"
                 />
                 <Password
@@ -20,7 +24,9 @@ export const Login = view(LoginViewModel)(({ viewModel }) => {
                     onUpdate={viewModel.onChangePassword}
                     placeholder="Пароль"
                     pin="round-round"
+                    disabled={viewModel.isLoading}
                     errorMessage={viewModel.passwordError}
+                    alwaysShowError
                     size="xl"
                     showRevealButton
                 />
@@ -32,10 +38,12 @@ export const Login = view(LoginViewModel)(({ viewModel }) => {
                 width="max"
                 size="xl"
                 onClick={viewModel.onLogin}
-                disabled={!viewModel.isValidLoginForm}
+                loading={viewModel.isLoading}
+                disabled={viewModel.hasErrors}
+                type="submit"
             >
                 Войти
             </Button>
-        </div>
+        </form>
     );
 });

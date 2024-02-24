@@ -5,37 +5,54 @@ import { Password, TextBox } from '../../../../shared/ui';
 import * as styles from '../Registration.module.scss';
 
 export const EnterDataBlock = childView<RegistrationViewModel>()(({ viewModel }) => (
-    <div className={styles.block}>
+    <form className={styles.block}>
         <div className={styles.inputs}>
             <TextBox
                 size="xl"
                 pin="round-round"
+                autoFocus
+                alwaysShowError
+                disabled={viewModel.isLoading}
+                type={viewModel.registrationType === 'email' ? 'email' : 'tel'}
                 placeholder={viewModel.registrationType === 'email' ? 'Email' : 'Телефон'}
                 value={viewModel.registrationType === 'email' ? viewModel.email : viewModel.phone}
-                onChange={
-                    viewModel.registrationType === 'email'
-                        ? viewModel.onChangeEmail
-                        : viewModel.onChangePhone
-                }
-            />
+                errorMessage={viewModel.registrationType === 'email'
+                    ? viewModel.emailError
+                    : viewModel.phoneError}
+                onChange={viewModel.registrationType === 'email'
+                    ? viewModel.onChangeEmail
+                    : viewModel.onChangePhone} />
             <Password
                 value={viewModel.password}
                 onUpdate={viewModel.onChangePassword}
+                errorMessage={viewModel.passwordError}
+                disabled={viewModel.isLoading}
+                alwaysShowError
                 placeholder="Пароль"
                 pin="round-round"
-                errorMessage={viewModel.passwordError}
                 size="xl"
-                showRevealButton
-            />
+                showRevealButton />
+            <TextBox
+                size="xl"
+                pin="round-round"
+                placeholder={'Имя'}
+                alwaysShowError
+                disabled={viewModel.isLoading}
+                value={viewModel.name}
+                onChange={viewModel.onChangeName}
+                errorMessage={viewModel.nameError} />
         </div>
         <Button
             view="action"
             pin="round-round"
             width="max"
             size="xl"
+            type="submit"
+            disabled={viewModel.hasErrors}
             onClick={viewModel.onRegister}
+            loading={viewModel.isLoading}
         >
             Зарегистрироваться
         </Button>
-    </div>
+    </form>
 ));
