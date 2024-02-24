@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 interface PasswordProps extends Omit<PasswordInputProps, 'errorMessage'> {
     errorMessage?: string;
+    alwaysShowError?: boolean
 }
 
 export const Password = (props: PasswordProps) => {
@@ -14,12 +15,14 @@ export const Password = (props: PasswordProps) => {
         }
     };
 
+    const showError = props.alwaysShowError || touched;
+
     return (
         <PasswordInput
             {...props}
             onBlur={onBlur}
             errorMessage={props.errorMessage}
-            validationState={touched && props.errorMessage ? 'invalid' : undefined}
+            validationState={showError && props.errorMessage ? 'invalid' : undefined}
         />
     );
 };

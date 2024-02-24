@@ -5,7 +5,7 @@
     max-width: 400px;
     margin-inline: auto;
     align-items: center;
-    width: 370px;
+    width: 100%;
 }
 
 .logo {
@@ -15,7 +15,7 @@
 }
 
 .tabs{
-    width: 370px;
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;

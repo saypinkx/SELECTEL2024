@@ -15,6 +15,7 @@ export const Login = view(LoginViewModel)(({ viewModel }) => {
                     onChange={viewModel.onChangeLogin}
                     errorMessage={viewModel.loginError}
                     disabled={viewModel.isLoading}
+                    alwaysShowError
                     autoFocus
                     size="xl"
                 />
@@ -25,6 +26,7 @@ export const Login = view(LoginViewModel)(({ viewModel }) => {
                     pin="round-round"
                     disabled={viewModel.isLoading}
                     errorMessage={viewModel.passwordError}
+                    alwaysShowError
                     size="xl"
                     showRevealButton
                 />

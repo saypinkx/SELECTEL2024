@@ -91,14 +91,18 @@ export class RegistrationViewModel extends ViewModel {
                 });
             }
         } catch (error) {
-            if (isApiError<'first_name' | 'email' | 'password' | 'phone'>(error)) {
-                this.nameError = error.response?.data.first_name ?? '';
-                this.passwordError = error.response?.data.password ?? '';
-                this.phoneError = error.response?.data.phone ?? '';
-                this.emailError = error.response?.data.email ?? '';
-            }
+            runInAction(() => {
+                if (isApiError<'first_name' | 'email' | 'password' | 'phone'>(error)) {
+                    this.nameError = error.response?.data.first_name ?? '';
+                    this.passwordError = error.response?.data.password ?? '';
+                    this.phoneError = error.response?.data.phone ?? '';
+                    this.emailError = error.response?.data.email ?? '';
+                }
+            });
         } finally {
-            this.isLoading = false;
+            runInAction(() => {
+                this.isLoading = false;
+            });
         }
     };
 
@@ -115,11 +119,15 @@ export class RegistrationViewModel extends ViewModel {
             this.auth.setUserInfo(user);
             this.routes.router?.navigate('/profile');
         } catch (error) {
-            if (isApiError<'code'>(error)) {
-                this.confirmCodeError = error.response?.data.code ?? '';
-            }
+            runInAction(() => {
+                if (isApiError<'code'>(error)) {
+                    this.confirmCodeError = error.response?.data.code ?? '';
+                }
+            });
         } finally {
-            this.isLoading = false;
+            runInAction(() => {
+                this.isLoading = false;
+            });
         }
     };
 

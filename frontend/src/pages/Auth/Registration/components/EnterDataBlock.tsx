@@ -11,40 +11,36 @@ export const EnterDataBlock = childView<RegistrationViewModel>()(({ viewModel })
                 size="xl"
                 pin="round-round"
                 autoFocus
+                alwaysShowError
                 disabled={viewModel.isLoading}
                 type={viewModel.registrationType === 'email' ? 'email' : 'tel'}
                 placeholder={viewModel.registrationType === 'email' ? 'Email' : 'Телефон'}
                 value={viewModel.registrationType === 'email' ? viewModel.email : viewModel.phone}
-                errorMessage={
-                    viewModel.registrationType === 'email'
-                        ? viewModel.emailError
-                        : viewModel.phoneError
-                }
-                onChange={
-                    viewModel.registrationType === 'email'
-                        ? viewModel.onChangeEmail
-                        : viewModel.onChangePhone
-                }
-            />
+                errorMessage={viewModel.registrationType === 'email'
+                    ? viewModel.emailError
+                    : viewModel.phoneError}
+                onChange={viewModel.registrationType === 'email'
+                    ? viewModel.onChangeEmail
+                    : viewModel.onChangePhone} />
             <Password
                 value={viewModel.password}
                 onUpdate={viewModel.onChangePassword}
                 errorMessage={viewModel.passwordError}
                 disabled={viewModel.isLoading}
+                alwaysShowError
                 placeholder="Пароль"
                 pin="round-round"
                 size="xl"
-                showRevealButton
-            />
+                showRevealButton />
             <TextBox
                 size="xl"
                 pin="round-round"
                 placeholder={'Имя'}
+                alwaysShowError
                 disabled={viewModel.isLoading}
                 value={viewModel.name}
                 onChange={viewModel.onChangeName}
-                errorMessage={viewModel.nameError}
-            />
+                errorMessage={viewModel.nameError} />
         </div>
         <Button
             view="action"

@@ -10,6 +10,7 @@ export const ConfirmBlock = childView<RegistrationViewModel>()(({ viewModel }) =
             <TextBox
                 placeholder="Код подтверждения"
                 pin="round-round"
+                alwaysShowError
                 value={viewModel.confirmCode}
                 onChange={viewModel.onChangeConfirmCode}
                 errorMessage={viewModel.confirmCodeError}
