@@ -3,39 +3,41 @@ from sqlalchemy import ForeignKey, Table, Column, Integer, LargeBinary, String, 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy_file import FileField
 
-zxc = Base
-Donation = Table('Donation', zxc.metadata,
-                 Column('id', Integer, autoincrement=True, primary_key=True),
-                 Column('type_donation', String), Column('date', String), Column('is_stationary', Boolean),
-                 Column('location', String), Column('centre', String),
-                 Column('certificate', String, nullable=True), Column('type_price', String), extend_existing=True
-                 )
+base = Base
+# Donation = Table('Donation', base.metadata,
+#                  Column('id', Integer, autoincrement=True, primary_key=True),
+#                  Column('type_donation', String), Column('date', String), Column('is_stationary', Boolean),
+#                  Column('location', String), Column('centre', String),
+#                  Column('certificate', String, nullable=True), Column('type_price', String), extend_existing=True
+#                  )
 
 
-class User(zxc):
+Donation_User = Table('Donation_User',
+                      Base.metadata,
+                      Column('id', Integer, autoincrement=True, primary_key=True),
+                      Column('donation_id', Integer, ForeignKey('Donation.id')),
+                      Column('user_id', Integer, ForeignKey('User.id'), nullable=True), extend_existing=True
+                      )
+
+
+class Donation(Base):
+    __tablename__ = 'Donation'
+    __table_args__ = {'extend_existing': True}
+    id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
+    type_donation: Mapped[str] = mapped_column()
+    date: Mapped[str] = mapped_column()
+    type_price: Mapped[str] = mapped_column()
+    is_stationary: Mapped[bool] = mapped_column(nullable=True)
+    location: Mapped[str] = mapped_column(nullable=True)
+    centre: Mapped[str] = mapped_column()
+    certificate: Mapped[str] = mapped_column()
+
+
+class User(base):
     __tablename__ = 'User'
     __table_args__ = {'extend_existing': True}
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
     firstname: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str] = mapped_column()
     tag: Mapped[str] = mapped_column(nullable=True)
-
-#
-# Donation_User = Table('Donation_User',
-#                       Base.metadata,
-#                       Column('id', Integer, autoincrement=True, primary_key=True),
-#                       Column('donation_id', Integer, ForeignKey('Donation.id')),
-#                       Column('user_id', Integer, ForeignKey('User.id'))
-#                       )
-
-
-# class Donation(Base):
-#     __table__name = 'Donation'
-#     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
-#     type_donation: Mapped[str] = mapped_column(unique=True)
-#     date: Mapped[str] = mapped_column()
-#     type_price: Mapped[str] = mapped_column()
-#     is_stationary: Mapped[bool] = mapped_column(nullable=True)
-#     location: Mapped[str] = mapped_column(nullable=True)
-#     centre: Mapped[str] = mapped_column()
-#     certificate: Mapped[FileField] = mapped_column()
+    donations = relationship('Donation', uselist=True, secondary=Donation_User)

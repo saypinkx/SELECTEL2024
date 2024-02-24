@@ -5,11 +5,14 @@ from app.schemas.donation import DonationCreate
 from fastapi import APIRouter, Depends, Body, Path, HTTPException, Query, status
 from typing import Annotated
 from fastapi import File, UploadFile
+import uuid
+from fastapi.responses import FileResponse
+from datetime import datetime
 
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import select
 
-router = APIRouter(prefix='/api/donation')
+router = APIRouter(prefix='/api/donations')
 
 session = db_session()
 
@@ -48,37 +51,73 @@ session = db_session()
 #     db.execute(insert_stmnt)
 #     db.commit()
 #     return 'ok'
+# @router.post('/', status_code=201)
+# def create_donation0(type_donation: str, location: str, date: str, is_stationary: bool, centre: str, type_price: str,
+#                      file: UploadFile = File(default=None)):
+#     db = db_session()
+#     insert_stmnt = Donation.insert().values(type_donation=type_donation, location=location,
+#                                             date=date,
+#                                             is_stationary=is_stationary,
+#                                             centre=centre, type_price=type_price)
+#     # donation_db = Donation(type_donation=donation.type_donation, location=donation.location, date=donation.date,
+#     #                        is_stationary=donation.is_stationary,
+#     #                        centre=donation.centre, type_price=donation.type_price)
+#     db.execute(insert_stmnt)
+#     db.commit()
+#     return 'ok'
+
+
 @router.post('/', status_code=201)
-def create_donation0(type_donation: str, location: str, date: str, is_stationary: bool, centre: str, type_price: str,
-                     file: UploadFile = File(default=None)):
+def create_donation(type_donation: str, location: str, date: str, is_stationary: bool, centre: str, type_price: str,
+                    file: UploadFile = File(default=None)):
     db = db_session()
-    insert_stmnt = Donation.insert().values(type_donation=type_donation, location=location,
-                                            date=date,
-                                            is_stationary=is_stationary,
-                                            centre=centre, type_price=type_price)
-    # donation_db = Donation(type_donation=donation.type_donation, location=donation.location, date=donation.date,
-    #                        is_stationary=donation.is_stationary,
-    #                        centre=donation.centre, type_price=donation.type_price)
-    db.execute(insert_stmnt)
-    db.commit()
-    return 'ok'
-
-
-@router.post('/test', status_code=201)
-def create_donation0(type_donation: str, location: str, date: str, is_stationary: bool, centre: str, type_price: str,
-                     file: UploadFile = File(default=None)):
-    db = db_session()
-    filename = file.filename
+    file_format = file.filename.split('.')[1]
+    filename = str(uuid.uuid4()) + '.' + file_format
     filepath = f'./files/{filename}'
 
     with open(filepath, 'wb') as f:
         content = file.file.read()
         f.write(content)
-    insert_stmnt = Donation.insert().values(type_donation=type_donation, location=location,
-                                            date=date,
-                                            is_stationary=is_stationary,
-                                            centre=centre, type_price=type_price, certificate=f.name)
-    db.execute(insert_stmnt)
+        f.close()
+
+    donation_db = Donation(type_donation=type_donation, location=location, date=date, is_stationary=is_stationary,
+                           certificate=filename,
+                           centre=centre, type_price=type_price)
+
+    db.add(donation_db)
     db.commit()
 
-    return {"message": f"Successfully uploaded {file.filename}"}
+    return {"message": f"Successfully create donation"}
+
+
+@router.get("/{donation_id}/certificate")
+def download_certificate(donation_id: int):
+    db = db_session()
+    donation_db = db.query(Donation).get(donation_id)
+    if not donation_db:
+        raise HTTPException(status_code=403, detail='donation with id not found')
+    return FileResponse(path=f'./files/{donation_db.certificate}', filename=donation_db.certificate,
+                        media_type='multipart/form-data')
+
+
+@router.put("/{donation_id}/certificate")
+def update_donation(donation_id: Annotated[int, Path()], str, location: str, date: str, is_stationary: bool,
+                    centre: str, type_price: str,
+                    file: UploadFile = File(default=None)):
+    db = db_session()
+    donation_db = db.query(Donation).get(donation_id)
+    if not donation_db:
+        raise HTTPException(status_code=403, detail='donation with id not found')
+
+    file_format = file.filename.split('.')[1]
+    filename = 'r' + donation_db.certificate + '.' + file_format
+    filepath = f'./files/{filename}'
+
+    with open(filepath, 'wb') as f:
+        content = file.file.read()
+        f.write(content)
+        f.close()
+    donation_db.location, donation_db.date, donation_db.is_stationary, donation_db.cente, donation_db.type_price, donation_db.certificate = location, date, is_stationary, centre, type_price, filename
+    db.add(donation_db)
+    db.commit()
+    return {"message": f"Successfully update donation"}
