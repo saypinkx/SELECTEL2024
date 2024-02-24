@@ -158,7 +158,7 @@ async def send_local_photo(chat_id, photo_path):
 
 
 @dp.callback_query_handler(text='send_photo')
-async def profile(callback: types.CallbackQuery):
+async def send_photo(callback: types.CallbackQuery):
     await send_local_photo(chat_id=callback.message.chat.id, photo_path=f'./files/one.jpg')
     await send_local_photo(chat_id=callback.message.chat.id, photo_path=f'./files/two.jpg')
     await send_local_photo(chat_id=callback.message.chat.id, photo_path=f'./files/three.jpg')
