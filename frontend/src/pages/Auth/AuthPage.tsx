@@ -25,10 +25,8 @@ export const AuthPage = () => {
                     },
                 ]}
             />
-            <div>
-                {activeTab === 'login' && <Login />}
-                {activeTab === 'reg' && <Registration />}
-            </div>
+            {activeTab === 'login' && <Login />}
+            {activeTab === 'reg' && <Registration />}
         </div>
     );
 };
