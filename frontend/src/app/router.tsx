@@ -1,8 +1,14 @@
 import { Navigate, Route, Routes, createRoutesFromElements, useLocation } from 'react-router-dom';
-import { AuthPage, BonusPage, BonusesPage, ProfilePage } from '../pages';
 import { childView } from '@yoskutik/react-vvm';
 import { AppViewModel } from './AppViewModel';
-import { DonationPage } from '../pages/Donation/Donation';
+import { Suspense, lazy } from 'react';
+import { Loader } from '@gravity-ui/uikit';
+
+const AuthPage = lazy(() => import('../pages/Auth'));
+const BonusesPage = lazy(() => import('../pages/Bonuses'));
+const BonusPage = lazy(() => import('../pages/Bonus'));
+const DonationPage = lazy(() => import('../pages/Donation'));
+const ProfilePage = lazy(() => import('../pages/Profile'));
 
 const RequireAuth = childView<AppViewModel>()<{ children: JSX.Element }>(({
     viewModel,
@@ -17,9 +23,6 @@ const RequireAuth = childView<AppViewModel>()<{ children: JSX.Element }>(({
 });
 
 export const routes = createRoutesFromElements([
-    <Route path="/bonus" element={<BonusesPage />} />,
-    <Route path="/bonus/:id" element={<BonusPage />} />,
-    <Route path="/donation" element={<DonationPage />} />,
     <Route path="/auth" element={<AuthPage />} />,
     <Route
         index
@@ -27,7 +30,12 @@ export const routes = createRoutesFromElements([
         element={
             <RequireAuth>
                 <Routes>
-                    <Route path="/profile" element={<ProfilePage />} />
+                    <Suspense fallback={<Loader size="l" />}>
+                        <Route path="/bonus" element={<BonusesPage />} />,
+                        <Route path="/bonus/:id" element={<BonusPage />} />,
+                        <Route path="/donation" element={<DonationPage />} />,
+                        <Route path="/profile" element={<ProfilePage />} />
+                    </Suspense>
                 </Routes>
             </RequireAuth>
         }

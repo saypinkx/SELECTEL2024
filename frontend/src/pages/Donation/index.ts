@@ -1,1 +1,3 @@
-export * from './DonationViewModel';
+import { DonationPage } from './Donation';
+
+export default DonationPage;

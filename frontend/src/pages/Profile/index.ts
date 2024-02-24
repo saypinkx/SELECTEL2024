@@ -1,2 +1,3 @@
-export * from './ProfilePage';
-export * from './ProfilePageViewModel';
+import { ProfilePage } from './ProfilePage';
+
+export default ProfilePage;
