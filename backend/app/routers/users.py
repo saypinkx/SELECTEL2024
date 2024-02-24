@@ -1,7 +1,6 @@
-from backend.app.models import User
+from app.models import User
 from fastapi import APIRouter
-from database import db_session
-
+from app.database import db_session
 
 user_router = APIRouter(prefix='/api/users')
 
