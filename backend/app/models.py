@@ -40,3 +40,4 @@ class Donation(Base):
     certificate: Mapped[str] = mapped_column(nullable=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey(User.id))
     owner = relationship("User", back_populates='donations', foreign_keys=owner_id)
+    status: Mapped[str] = mapped_column(nullable=True)

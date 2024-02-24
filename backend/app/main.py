@@ -12,7 +12,7 @@ app = FastAPI()
 
 app.include_router(router)
 app.include_router(user_router)
-# base.metadata.drop_all(bind=db_engine())
+base.metadata.drop_all(bind=db_engine())
 base.metadata.create_all(bind=db_engine())
 @app.on_event("startup")
 def on_startup():

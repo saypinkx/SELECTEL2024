@@ -76,14 +76,14 @@ def get_user_donation(user_id: Annotated[int, Query()]):
 
 @router.post('/', status_code=201)
 def create_donation(type_donation: str, location: str, date: str, is_stationary: bool, centre: str, type_price: str,
-                    user_id: int,
+                    user_id: int, status: str,
                     file: UploadFile = File(default=None)):
     db = db_session()
     user_db = db.query(User).get(user_id)
     if not user_db:
         raise HTTPException(status_code=403, detail='user with id not found')
     donation_db = Donation(type_donation=type_donation, location=location, date=date, is_stationary=is_stationary,
-                           centre=centre, type_price=type_price, owner_id=user_id)
+                           centre=centre, type_price=type_price, owner_id=user_id, status=status)
     if file:
         file_format = file.filename.split('.')[1]
         filename = str(uuid.uuid4()) + '.' + file_format
@@ -111,8 +111,8 @@ def download_certificate(donation_id: int):
 
 
 @router.put("/{donation_id}")
-def update_donation(donation_id: Annotated[int, Path()], str, location: str, date: str, is_stationary: bool,
-                    centre: str, type_price: str,
+def update_donation(donation_id: Annotated[int, Path()], location: str, date: str, is_stationary: bool,
+                    centre: str, type_price: str, status: str,
                     file: UploadFile = File(default=None)):
     db = db_session()
     donation_db = db.query(Donation).get(donation_id)
@@ -129,8 +129,7 @@ def update_donation(donation_id: Annotated[int, Path()], str, location: str, dat
             f.close()
         donation_db.certificate = filename
 
-    donation_db.location, donation_db.date, donation_db.is_stationary, donation_db.cente, donation_db.type_price = location, date, is_stationary, centre, type_price
+    donation_db.location, donation_db.date, donation_db.is_stationary, donation_db.centre, donation_db.type_price, donation_db.status = location, date, is_stationary, centre, type_price, status
     db.add(donation_db)
     db.commit()
     return {"message": f"Successfully update donation"}
-
