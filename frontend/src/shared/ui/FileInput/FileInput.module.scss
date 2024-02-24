@@ -1,3 +1,6 @@
 .icon{
-    color: rgb(0,0,0, 0.5);
+    color: var(--g-color-text-secondary);
+}
+.iconWithFile{
+    color: var(--g-color-text-brand);
 }
