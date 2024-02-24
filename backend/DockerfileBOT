@@ -1,0 +1,7 @@
+from python:3.10
+RUN mkdir /backend
+WORKDIR /backend
+COPY  ./bot ./bot
+RUN pip install -r ./bot/requirements.txt
+WORKDIR ./bot
+CMD ["python3","bot.py"]
