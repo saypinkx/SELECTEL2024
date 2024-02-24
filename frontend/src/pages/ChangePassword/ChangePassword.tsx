@@ -21,11 +21,9 @@ export const ChangePassword = view(ChangePasswordViewModel)(({ viewModel }) => {
     }, [viewModel.saveNewPassword]);
 
     return (
-        <Page title="Изменить пароль">
-            <div className={styles.content}>
-                <TextBox label="Текущий пароль" placeholder="Введите текущий пароль" size="xl" />
-                <TextBox label="Новый пароль" placeholder="Введите новый пароль" size="xl" />
-            </div>
+        <Page title="Изменить пароль" cls={styles.content}>
+            <TextBox label="Текущий пароль" placeholder="Введите текущий пароль" size="xl" />
+            <TextBox label="Новый пароль" placeholder="Введите новый пароль" size="xl" />
         </Page>
     );
 });

@@ -9,15 +9,14 @@
  * ---------------------------------------------------------------
  */
 
-import { Service } from "typedi";
+import Container, { Service } from "typedi";
 import { Picture } from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 @Service()
 export class PictureApi<SecurityDataType = unknown> {
-  http: HttpClient<SecurityDataType>;
-  constructor(http: HttpClient<SecurityDataType>) {
-    this.http = http;
+  constructor(public http: HttpClient<SecurityDataType>) {
+    this.http = Container.get(HttpClient) as HttpClient<SecurityDataType>;
   }
 
   /**

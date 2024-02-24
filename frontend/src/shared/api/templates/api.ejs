@@ -4,7 +4,7 @@ const { _, pascalCase, require } = utils;
 const apiClassName = pascalCase(route.moduleName);
 const routes = route.routes;
 const dataContracts = _.map(modelTypes, "name");
-%>import { Service } from 'typedi';  <% if (config.httpClientType === config.constants.HTTP_CLIENT.AXIOS) { %> import { AxiosRequestConfig, AxiosResponse } from "axios"; <% } %>
+%>import Container, { Service } from 'typedi';  <% if (config.httpClientType === config.constants.HTTP_CLIENT.AXIOS) { %> import { AxiosRequestConfig, AxiosResponse } from "axios"; <% } %>
 
 import { HttpClient, RequestParams, ContentType, HttpResponse } from "./<%~ config.fileNames.httpClient %>";
 <% if (dataContracts.length) { %>
@@ -14,9 +14,8 @@ import { <%~ dataContracts.join(", ") %> } from "./<%~ config.fileNames.dataCont
 @Service()
 export class <%= apiClassName %>Api<SecurityDataType = unknown><% if (!config.singleHttpClient) { %> extends HttpClient<SecurityDataType> <% } %> {
 <% if(config.singleHttpClient) { %>
-http: HttpClient<SecurityDataType>;
-constructor (http: HttpClient<SecurityDataType>) {
-this.http = http;
+constructor (public http: HttpClient<SecurityDataType>) {
+this.http = Container.get(HttpClient) as HttpClient<SecurityDataType>;
 }
 <% } %>
 

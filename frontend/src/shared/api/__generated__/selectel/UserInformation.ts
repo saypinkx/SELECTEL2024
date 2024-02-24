@@ -9,15 +9,14 @@
  * ---------------------------------------------------------------
  */
 
-import { Service } from "typedi";
+import Container, { Service } from "typedi";
 import { Top100Response } from "./data-contracts";
 import { HttpClient, RequestParams } from "./http-client";
 
 @Service()
 export class UserInformationApi<SecurityDataType = unknown> {
-  http: HttpClient<SecurityDataType>;
-  constructor(http: HttpClient<SecurityDataType>) {
-    this.http = http;
+  constructor(public http: HttpClient<SecurityDataType>) {
+    this.http = Container.get(HttpClient) as HttpClient<SecurityDataType>;
   }
 
   /**
