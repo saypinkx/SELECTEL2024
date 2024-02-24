@@ -6,6 +6,7 @@ import { ChevronRight } from '@gravity-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import { DateField } from '@gravity-ui/date-components';
 import styles from './ProfilePage.module.scss';
+import { GenderEnum } from '../../shared/api';
 
 export const ProfilePage = view(ProfilePageViewModel)(({ viewModel }) => {
     const navigate = useNavigate();
@@ -35,15 +36,17 @@ export const ProfilePage = view(ProfilePageViewModel)(({ viewModel }) => {
             <LabelableContainer label="Пол">
                 <div className={styles.flexContainer}>
                     <Button
-                        view={viewModel.gender === 'male' ? 'outlined-action' : 'outlined'}
-                        onClick={() => viewModel.setGender('male')}
+                        view={viewModel.gender === GenderEnum.Male ? 'outlined-action' : 'outlined'}
+                        onClick={() => viewModel.setGender(GenderEnum.Male)}
                         size="xl"
                     >
                         Мужской
                     </Button>
                     <Button
-                        view={viewModel.gender === 'female' ? 'outlined-action' : 'outlined'}
-                        onClick={() => viewModel.setGender('female')}
+                        view={
+                            viewModel.gender === GenderEnum.Female ? 'outlined-action' : 'outlined'
+                        }
+                        onClick={() => viewModel.setGender(GenderEnum.Female)}
                         size="xl"
                     >
                         Женский
@@ -52,11 +55,23 @@ export const ProfilePage = view(ProfilePageViewModel)(({ viewModel }) => {
             </LabelableContainer>
 
             <LabelableContainer label="Город">
-                <Select placeholder="Выберите ваш город" size="xl" />
+                <Select
+                    placeholder="Выберите ваш город"
+                    size="xl"
+                    onUpdate={ids => viewModel.setCity(+ids[0])}
+                    options={viewModel.cities.map(city => ({
+                        value: city.id.toString(),
+                        content: city.title,
+                    }))}
+                />
             </LabelableContainer>
 
             <LabelableContainer label="О себе">
-                <TextBox placeholder="Расскажите интересное о себе" />
+                <TextBox
+                    placeholder="Расскажите интересное о себе"
+                    value={viewModel.about}
+                    onChange={viewModel.setAbout}
+                />
             </LabelableContainer>
 
             <LabelableContainer label="Пароль">
