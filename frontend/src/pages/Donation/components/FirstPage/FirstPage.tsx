@@ -16,11 +16,8 @@ export const FirstPage = view(FirstPageViewModel)(({ viewModel }) => {
             text: 'Далее',
         });
 
-        Telegram.WebApp.onEvent('mainButtonClicked', () => {
-            runInAction(() => {
-                viewModel.parent.step = 'second';
-            });
-        });
+        Telegram.WebApp.onEvent('mainButtonClicked', viewModel.parent.goToSecondPage);
+        return () => Telegram.WebApp.offEvent('mainButtonClicked', viewModel.parent.goToSecondPage);
     }, [viewModel]);
 
     useEffect(() => {

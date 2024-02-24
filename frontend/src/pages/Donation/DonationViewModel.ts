@@ -15,5 +15,13 @@ export class DonationViewModel extends ViewModel {
         makeObservable(this);
     }
 
+    @action goToFirstPage = () => {
+        this.step = 'first';
+    };
+
+    @action goToSecondPage = () => {
+        this.step = 'second';
+    };
+
     @action saveDonation = () => {};
 }

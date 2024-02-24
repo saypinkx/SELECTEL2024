@@ -2,7 +2,6 @@ import { view } from '@yoskutik/react-vvm';
 import { Button, Select } from '@gravity-ui/uikit';
 import { useEffect } from 'react';
 import { placeTypes } from '../../constatns';
-import { runInAction } from 'mobx';
 import { SecondPageViewModel } from './SecondPageViewModel';
 import styles from './SecondPage.module.scss';
 import { EmptySearch } from './components';
@@ -20,26 +19,14 @@ export const SecondPage = view(SecondPageViewModel)(({ viewModel }) => {
             text: 'Сохранить донацию',
             is_visible: false,
         });
-        Telegram.WebApp.onEvent('mainButtonClicked', () => {
-            viewModel.parent.saveDonation();
-            Telegram.WebApp.showPopup(
-                {
-                    title: 'Добавление донации',
-                    message: 'Донация добавлена',
-                    buttons: [{ type: 'ok' }],
-                },
-                () => {
-                    Telegram.WebApp.close();
-                },
-            );
-        });
-
         Telegram.WebApp.BackButton.isVisible = true;
-        Telegram.WebApp.onEvent('backButtonClicked', () => {
-            runInAction(() => {
-                viewModel.parent.step = 'first';
-            });
-        });
+        Telegram.WebApp.onEvent('mainButtonClicked', viewModel.saveDonation);
+        Telegram.WebApp.onEvent('backButtonClicked', viewModel.parent.goToFirstPage);
+        return () => {
+            Telegram.WebApp.BackButton.isVisible = false;
+            Telegram.WebApp.offEvent('mainButtonClicked', viewModel.saveDonation);
+            Telegram.WebApp.offEvent('backButtonClicked', viewModel.parent.goToFirstPage);
+        };
     }, [viewModel]);
 
     return (

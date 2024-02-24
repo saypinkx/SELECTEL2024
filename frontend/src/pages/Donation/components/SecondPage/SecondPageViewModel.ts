@@ -152,4 +152,11 @@ export class SecondPageViewModel extends ViewModel<DonationViewModel> {
     @action uploadCertificate = (files: File[]) => {
         this.certificate = files[0];
     };
+
+    @action saveDonation = () => {
+        this.parent.saveDonation();
+        Telegram.WebApp.showAlert('Донация добавлена', () => {
+            Telegram.WebApp.close();
+        });
+    };
 }
