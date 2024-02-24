@@ -125,14 +125,15 @@ async def profile(callback: types.CallbackQuery):
     text = (
         f'Зарегистрируйтесь в DonorSearch или проверьте свой статус Почетного донора. Узнайте о бонусах для доноров и посмотрите топ-100 доноров.')
     website_url1 = 'https://shorturl.at/eprEL'
-    url4 = 'https://shorturl.at/eprEL'
+    url_signin = 'https://shorturl.at/ioz18'
+    url_bonus ='https://shorturl.at/fAPRT'
     url0 = 'https://shorturl.at/fJY15'
 
     keyboard = types.InlineKeyboardMarkup()
     handler_button0 = types.InlineKeyboardButton(text='🎖Статус почетного донора', callback_data='null')
-    handler_button1 = types.InlineKeyboardButton(text='👤Вход или регистрация', web_app=WebAppInfo(url=url0))
+    handler_button1 = types.InlineKeyboardButton(text='👤Вход или регистрация', web_app=WebAppInfo(url=url_signin))
     handler_button2 = types.InlineKeyboardButton(text='🎁Бонусы',
-                                                 web_app=WebAppInfo(url=website_url1))
+                                                 web_app=WebAppInfo(url=url_bonus))
     handler_button3 = types.InlineKeyboardButton(text='🏆Рейтинг доноров', web_app=WebAppInfo(url=website_url1))
 
     keyboard.row(handler_button0)
