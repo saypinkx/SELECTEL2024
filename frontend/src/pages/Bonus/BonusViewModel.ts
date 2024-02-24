@@ -6,12 +6,18 @@ import Container, { Service } from 'typedi';
 @Service()
 export class BonusPageViewModel extends ViewModel {
     @observable.ref bonus?: BonusDetail;
+    @observable step: 'view' | 'review' = 'view';
+    @observable review = '';
 
     constructor(private bonusApi: BonusInformationApi) {
         super();
         makeObservable(this);
         this.bonusApi = Container.get(BonusInformationApi);
     }
+
+    @action onChangeReview = (value: string) => {
+        this.review = value;
+    };
 
     @action async loadBonus(id: number) {
         this.bonusApi.bonusesRetrieve(+id).then(bonus => {
@@ -21,8 +27,20 @@ export class BonusPageViewModel extends ViewModel {
         });
     }
 
-    giveReview = () => {
-        Telegram.WebApp.showAlert('Отзыв оставлен', () => {
+    @action giveReview = () => {
+        this.step = 'review';
+        Telegram.WebApp.MainButton.setParams({
+            is_visible: true,
+            color: '#38AFF2',
+            text: 'Оставить отзыв',
+            text_color: '#fff',
+        });
+        Telegram.WebApp.offEvent('mainButtonClicked', this.giveReview);
+        Telegram.WebApp.onEvent('mainButtonClicked', this.saveReview);
+    };
+
+    saveReview = () => {
+        Telegram.WebApp.showAlert('Отзыв отправлен', () => {
             Telegram.WebApp.close();
         });
     };
@@ -30,7 +48,7 @@ export class BonusPageViewModel extends ViewModel {
     takeBonus = () => {
         Telegram.WebApp.MainButton.setParams({
             is_visible: true,
-            color: '#38AFF2',
+            color: '#27C175',
             text: 'Оставить отзыв',
             text_color: '#fff',
         });

@@ -1,6 +1,6 @@
 import { view } from '@yoskutik/react-vvm';
 import { BonusPageViewModel } from './BonusViewModel';
-import { Card, Loader } from '@gravity-ui/uikit';
+import { Card, Loader, TextArea } from '@gravity-ui/uikit';
 import { useCallback, useEffect } from 'react';
 import styles from './Bonus.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -32,7 +32,7 @@ export const BonusPage = view(BonusPageViewModel)(({ viewModel }) => {
         return () => {
             Telegram.WebApp.MainButton.hide();
             Telegram.WebApp.offEvent('mainButtonClicked', viewModel.takeBonus);
-            Telegram.WebApp.onEvent('mainButtonClicked', viewModel.giveReview);
+            Telegram.WebApp.offEvent('mainButtonClicked', viewModel.giveReview);
         };
     }, [viewModel.giveReview, viewModel.takeBonus]);
 
@@ -67,10 +67,22 @@ export const BonusPage = view(BonusPageViewModel)(({ viewModel }) => {
                                 )?.format('YYYY MMM DD')}`}</p>
                             </div>
                         </div>
-                        <p
-                            className={styles.description}
-                            dangerouslySetInnerHTML={{ __html: viewModel.bonus?.bonus_description }}
-                        ></p>
+                        {viewModel.step === 'view' && (
+                            <p
+                                className={styles.description}
+                                dangerouslySetInnerHTML={{
+                                    __html: viewModel.bonus?.bonus_description,
+                                }}
+                            ></p>
+                        )}
+                        {viewModel.step === 'review' && (
+                            <TextArea
+                                rows={10}
+                                value={viewModel.review}
+                                placeholder="Оставьте свой отзыв здесь"
+                                onChange={e => viewModel.onChangeReview(e.target.value)}
+                            />
+                        )}
                     </Card>
                 </>
             )}
