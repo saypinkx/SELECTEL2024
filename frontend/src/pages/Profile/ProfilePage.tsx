@@ -7,9 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import { DateField } from '@gravity-ui/date-components';
 import styles from './ProfilePage.module.scss';
 import { GenderEnum } from '../../shared/api';
+import { useEffect } from 'react';
 
 export const ProfilePage = view(ProfilePageViewModel)(({ viewModel }) => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        return () => viewModel.hideSaveButton();
+    }, [viewModel]);
 
     return (
         <Page title="Мой профиль" cls={styles.content}>
