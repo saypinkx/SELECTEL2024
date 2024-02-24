@@ -5,16 +5,18 @@ import uvicorn
 from app.database import Test, db_session, db_engine
 from app.models import base
 from app.routers.donation import router
+from app.routers.users import user_router
 from app.database import Db
 
 app = FastAPI()
 
 app.include_router(router)
+app.include_router(user_router)
 base.metadata.drop_all(bind=db_engine())
 base.metadata.create_all(bind=db_engine())
 @app.on_event("startup")
 def on_startup():
-   print('startup')
+    print('startup')
 
 
 app.add_middleware(
