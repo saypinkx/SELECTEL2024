@@ -1,4 +1,4 @@
-from app.models import Donation
+from app.models import Donation, User
 from fastapi import APIRouter
 from app.database import db_session
 from app.schemas.donation import DonationCreate
@@ -65,14 +65,25 @@ session = db_session()
 #     db.execute(insert_stmnt)
 #     db.commit()
 #     return 'ok'
+@router.get('/', status_code=200)
+def get_user_donation(user_id: Annotated[int, Query()]):
+    db = db_session()
+    user_db = db.query(User).get(user_id)
+    if not user_db:
+        raise HTTPException(status_code=403, detail='user with id not found')
+    return user_db.donations
 
 
 @router.post('/', status_code=201)
 def create_donation(type_donation: str, location: str, date: str, is_stationary: bool, centre: str, type_price: str,
+                    user_id: int,
                     file: UploadFile = File(default=None)):
     db = db_session()
+    user_db = db.query(User).get(user_id)
+    if not user_db:
+        raise HTTPException(status_code=403, detail='user with id not found')
     donation_db = Donation(type_donation=type_donation, location=location, date=date, is_stationary=is_stationary,
-                           centre=centre, type_price=type_price)
+                           centre=centre, type_price=type_price, owner_id=user_id)
     if file:
         file_format = file.filename.split('.')[1]
         filename = str(uuid.uuid4()) + '.' + file_format
@@ -92,6 +103,7 @@ def create_donation(type_donation: str, location: str, date: str, is_stationary:
 def download_certificate(donation_id: int):
     db = db_session()
     donation_db = db.query(Donation).get(donation_id)
+
     if not donation_db:
         raise HTTPException(status_code=403, detail='donation with id not found')
     return FileResponse(path=f'./files/{donation_db.certificate}', filename=donation_db.certificate,

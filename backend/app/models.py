@@ -3,6 +3,8 @@ from sqlalchemy import ForeignKey, Table, Column, Integer, LargeBinary, String, 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 base = Base
+
+
 # Donation = Table('Donation', base.metadata,
 #                  Column('id', Integer, autoincrement=True, primary_key=True),
 #                  Column('type_donation', String), Column('date', String), Column('is_stationary', Boolean),
@@ -11,12 +13,18 @@ base = Base
 #                  )
 
 
-Donation_User = Table('Donation_User',
-                      Base.metadata,
-                      Column('id', Integer, autoincrement=True, primary_key=True),
-                      Column('donation_id', Integer, ForeignKey('Donation.id')),
-                      Column('user_id', Integer, ForeignKey('User.id'), nullable=True), extend_existing=True
-                      )
+class User(base):
+    __tablename__ = 'User'
+    __table_args__ = {'extend_existing': True}
+    id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
+    firstname: Mapped[str] = mapped_column(unique=True)
+    password: Mapped[str] = mapped_column()
+    email: Mapped[str] = mapped_column()
+    lastname: Mapped[str] = mapped_column()
+    patronym: Mapped[str] = mapped_column(nullable=True)
+    tag: Mapped[str] = mapped_column(nullable=True)
+    donations = relationship("Donation", back_populates='owner', uselist=True, foreign_keys='Donation.owner_id',
+                             cascade='all, delete-orphan')
 
 
 class Donation(Base):
@@ -30,16 +38,5 @@ class Donation(Base):
     location: Mapped[str] = mapped_column(nullable=True)
     centre: Mapped[str] = mapped_column()
     certificate: Mapped[str] = mapped_column(nullable=True)
-
-
-class User(base):
-    __tablename__ = 'User'
-    __table_args__ = {'extend_existing': True}
-    id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
-    firstname: Mapped[str] = mapped_column(unique=True)
-    password: Mapped[str] = mapped_column()
-    email: Mapped[str] = mapped_column()
-    lastname: Mapped[str] = mapped_column()
-    patronym: Mapped[str] = mapped_column(nullable=True)
-    tag: Mapped[str] = mapped_column(nullable=True)
-    donations = relationship('Donation', uselist=True, secondary=Donation_User)
+    owner_id: Mapped[int] = mapped_column(ForeignKey(User.id))
+    owner = relationship("User", back_populates='donations', foreign_keys=owner_id)
