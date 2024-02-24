@@ -29,7 +29,7 @@ class Donation(Base):
     is_stationary: Mapped[bool] = mapped_column(nullable=True)
     location: Mapped[str] = mapped_column(nullable=True)
     centre: Mapped[str] = mapped_column()
-    certificate: Mapped[str] = mapped_column()
+    certificate: Mapped[str] = mapped_column(nullable=True)
 
 
 class User(base):

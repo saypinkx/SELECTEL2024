@@ -71,22 +71,20 @@ session = db_session()
 def create_donation(type_donation: str, location: str, date: str, is_stationary: bool, centre: str, type_price: str,
                     file: UploadFile = File(default=None)):
     db = db_session()
-    file_format = file.filename.split('.')[1]
-    filename = str(uuid.uuid4()) + '.' + file_format
-    filepath = f'./files/{filename}'
-
-    with open(filepath, 'wb') as f:
-        content = file.file.read()
-        f.write(content)
-        f.close()
-
     donation_db = Donation(type_donation=type_donation, location=location, date=date, is_stationary=is_stationary,
-                           certificate=filename,
                            centre=centre, type_price=type_price)
+    if file:
+        file_format = file.filename.split('.')[1]
+        filename = str(uuid.uuid4()) + '.' + file_format
+        filepath = f'./files/{filename}'
 
+        with open(filepath, 'wb') as f:
+            content = file.file.read()
+            f.write(content)
+            f.close()
+        donation_db.certificate = filename
     db.add(donation_db)
     db.commit()
-
     return {"message": f"Successfully create donation"}
 
 
@@ -100,7 +98,7 @@ def download_certificate(donation_id: int):
                         media_type='multipart/form-data')
 
 
-@router.put("/{donation_id}/certificate")
+@router.put("/{donation_id}")
 def update_donation(donation_id: Annotated[int, Path()], str, location: str, date: str, is_stationary: bool,
                     centre: str, type_price: str,
                     file: UploadFile = File(default=None)):
@@ -108,16 +106,18 @@ def update_donation(donation_id: Annotated[int, Path()], str, location: str, dat
     donation_db = db.query(Donation).get(donation_id)
     if not donation_db:
         raise HTTPException(status_code=403, detail='donation with id not found')
+    if file:
+        file_format = file.filename.split('.')[1]
+        filename = 'r' + donation_db.certificate + '.' + file_format
+        filepath = f'./files/{filename}'
 
-    file_format = file.filename.split('.')[1]
-    filename = 'r' + donation_db.certificate + '.' + file_format
-    filepath = f'./files/{filename}'
+        with open(filepath, 'wb') as f:
+            content = file.file.read()
+            f.write(content)
+            f.close()
+        donation_db.certificate = filename
 
-    with open(filepath, 'wb') as f:
-        content = file.file.read()
-        f.write(content)
-        f.close()
-    donation_db.location, donation_db.date, donation_db.is_stationary, donation_db.cente, donation_db.type_price, donation_db.certificate = location, date, is_stationary, centre, type_price, filename
+    donation_db.location, donation_db.date, donation_db.is_stationary, donation_db.cente, donation_db.type_price = location, date, is_stationary, centre, type_price
     db.add(donation_db)
     db.commit()
     return {"message": f"Successfully update donation"}
