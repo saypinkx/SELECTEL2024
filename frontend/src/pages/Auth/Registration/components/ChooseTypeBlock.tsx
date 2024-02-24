@@ -12,6 +12,7 @@ export const ChooseTypeBlock = childView<RegistrationViewModel>()(({ viewModel }
                 pin="round-round"
                 width="max"
                 size="xl"
+                className={styles.typeButton}
                 onClick={() => viewModel.setRegistrationType('email')}
             >
                 <span>Регистрация по Email</span>
@@ -22,6 +23,7 @@ export const ChooseTypeBlock = childView<RegistrationViewModel>()(({ viewModel }
                 pin="round-round"
                 width="max"
                 size="xl"
+                className={styles.typeButton}
                 onClick={() => viewModel.setRegistrationType('phone')}
             >
                 <span>Регистрация по номеру телефона</span>

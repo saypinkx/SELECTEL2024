@@ -9,6 +9,13 @@
     --g-color-text-brand: #f73232;
     --g-color-text-brand-contrast: #fff;
     --g-color-base-selection: #ffb1b1;
+
+    --g-border-radius-xs: 1px;
+    --g-border-radius-s: 1px;
+    --g-border-radius-m: 2px;
+    --g-border-radius-l: 4px;
+    --g-border-radius-xl: 4px;
+    --g-border-radius-2xl: 8px;
 }
 
 body,
