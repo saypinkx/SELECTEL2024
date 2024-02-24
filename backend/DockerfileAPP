@@ -3,4 +3,5 @@ RUN mkdir /backend
 WORKDIR /backend
 COPY  ./app ./app
 RUN pip install -r ./app/requirements.txt
-CMD ["uvicorn","./app/main:app","--host","0.0.0.0", "--port","5500"]
+RUN cd ./app
+CMD ["uvicorn","main:app","--host","0.0.0.0", "--port","5500"]
