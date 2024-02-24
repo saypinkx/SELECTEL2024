@@ -1,0 +1,18 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    padding-inline: 20px;
+    box-sizing: border-box;
+}
+
+.flexContainer{
+    display: flex;
+    gap: 8px;
+}
+
+.changePasswordButton {
+    display: flex;
+    justify-content: start;
+}
