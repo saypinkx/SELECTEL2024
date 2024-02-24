@@ -1,6 +1,6 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from config import DB_PORT, DB_HOST, DB_USER, DB_PASS, DB_NAME
+from app.config import DB_PORT, DB_HOST, DB_USER, DB_PASS, DB_NAME
 from sqlalchemy import ForeignKey, Table, Column, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship, declarative_base
 

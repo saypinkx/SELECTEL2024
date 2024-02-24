@@ -1,4 +1,4 @@
-from database import Base
+from app.database import Base
 from sqlalchemy import ForeignKey, Table, Column, Integer, LargeBinary, String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy_file import FileField

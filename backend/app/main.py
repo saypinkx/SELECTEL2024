@@ -2,10 +2,10 @@ from fastapi import FastAPI, Path
 from typing import Annotated
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn
-from database import Test, db_session, db_engine
-from models import base
-from routers.donation import router
-from database import Db
+from app.database import Test, db_session, db_engine
+from app.models import base
+from app.routers.donation import router
+from app.database import Db
 
 app = FastAPI()
 
