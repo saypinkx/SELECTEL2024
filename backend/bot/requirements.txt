@@ -12,3 +12,4 @@ magic-filter==1.0.12
 multidict==6.0.5
 pytz==2024.1
 yarl==1.9.4
+python-dotenv==1.0.1
