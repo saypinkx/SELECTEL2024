@@ -32,8 +32,9 @@ export const BonusPage = view(BonusPageViewModel)(({ viewModel }) => {
         return () => {
             Telegram.WebApp.MainButton.hide();
             Telegram.WebApp.offEvent('mainButtonClicked', viewModel.takeBonus);
+            Telegram.WebApp.onEvent('mainButtonClicked', viewModel.giveReview);
         };
-    }, [viewModel.takeBonus]);
+    }, [viewModel.giveReview, viewModel.takeBonus]);
 
     useEffect(() => {
         Telegram.WebApp.BackButton.show();

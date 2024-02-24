@@ -21,6 +21,12 @@ export class BonusPageViewModel extends ViewModel {
         });
     }
 
+    giveReview = () => {
+        Telegram.WebApp.showAlert('Отзыв оставлен', () => {
+            Telegram.WebApp.close();
+        });
+    };
+
     takeBonus = () => {
         Telegram.WebApp.MainButton.setParams({
             is_visible: true,
@@ -29,5 +35,6 @@ export class BonusPageViewModel extends ViewModel {
             text_color: '#fff',
         });
         Telegram.WebApp.offEvent('mainButtonClicked', this.takeBonus);
+        Telegram.WebApp.onEvent('mainButtonClicked', this.giveReview);
     };
 }
