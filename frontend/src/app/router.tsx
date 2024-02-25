@@ -6,6 +6,7 @@ import {
     DonationPage,
     DonationsPage,
     ProfilePage,
+    TopPage,
 } from '../pages';
 import { childView } from '@yoskutik/react-vvm';
 import { AppViewModel } from './AppViewModel';
@@ -36,6 +37,7 @@ export const routes = createRoutesFromElements([
                     <Route path="/profile/change-password" element={<ChangePassword />} />
                     <Route path="/bonus/:id" element={<BonusPage />} />,
                     <Route path="/bonus" element={<BonusesPage />} />,
+                    <Route path="/top" element={<TopPage />} />,
                     <Route path="/*" element={<ProfilePage />} />
                 </Routes>
             </RequireAuth>
