@@ -1,11 +1,25 @@
 import { computed, makeObservable, observable } from 'mobx';
 import Container, { Service } from 'typedi';
-import { User } from '../shared/api';
-import { RouterService } from '.';
+import { ApiApi, User } from '../shared/api';
+import { RouterService } from './RouterService';
+
+export type MetaUser = User & {
+    meta?: {
+        id: number;
+        password: string;
+        firstname: string;
+        lastname: string;
+        email: string;
+        patronym: string;
+        tag: string;
+    };
+};
 
 @Service()
 export class AuthService {
-    @observable.ref userInfo: User | null = null;
+    private api = Container.get(ApiApi);
+
+    @observable.ref userInfo: MetaUser | null = null;
 
     @computed get userIsAuthenticated() {
         return !!this.userInfo;
@@ -32,9 +46,9 @@ export class AuthService {
         localStorage.setItem('user', JSON.stringify(user));
     };
 
-    public logout() {
+    public logout = () => {
         this.userInfo = null;
         localStorage.setItem('user', '');
         this.routes.router?.navigate('/auth');
-    }
+    };
 }

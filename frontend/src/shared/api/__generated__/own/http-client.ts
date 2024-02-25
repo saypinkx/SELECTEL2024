@@ -16,19 +16,20 @@ import { baseURL } from "../../const";
 
 export type QueryParamsType = Record<string | number, any>;
 
-export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
-  /** set parameter to `true` for call `securityWorker` for this request */
-  secure?: boolean;
-  /** request path */
-  path: string;
-  /** content type of request body */
-  type?: ContentType;
-  /** query params */
-  query?: QueryParamsType;
-  /** format of response (i.e. response.json() -> format: "json") */
-  format?: ResponseType;
-  /** request body */
-  body?: unknown;
+export interface FullRequestParams
+    extends Omit<AxiosRequestConfig, 'data' | 'params' | 'url' | 'responseType'> {
+    /** set parameter to `true` for call `securityWorker` for this request */
+    secure?: boolean;
+    /** request path */
+    path: string;
+    /** content type of request body */
+    type?: ContentType;
+    /** query params */
+    query?: QueryParamsType;
+    /** format of response (i.e. response.json() -> format: "json") */
+    format?: ResponseType;
+    /** request body */
+    body?: unknown;
 }
 
 export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
@@ -49,7 +50,7 @@ export enum ContentType {
 }
 
 @Service()
-export class HttpClient<SecurityDataType = unknown> {
+export class HttpClient2<SecurityDataType = unknown> {
   public instance: AxiosInstance;
   private securityData: SecurityDataType | null = null;
   private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
@@ -57,7 +58,7 @@ export class HttpClient<SecurityDataType = unknown> {
   private format?: ResponseType;
 
   constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = this.instance = axios.create({ baseURL });
+    this.instance = this.instance = axios.create({ baseURL: 'http://92.53.100.43:5500' });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;

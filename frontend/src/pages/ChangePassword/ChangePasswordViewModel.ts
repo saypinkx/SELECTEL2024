@@ -4,7 +4,7 @@ import Container, { Service } from 'typedi';
 import { AuthService } from '../../services';
 import { ApiApi } from '../../shared/api';
 
-@Service()
+@Service({ transient: true })
 export class ChangePasswordViewModel extends ViewModel {
     authService = Container.get(AuthService);
     api = Container.get(ApiApi);

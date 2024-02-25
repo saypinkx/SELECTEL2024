@@ -47,3 +47,9 @@ export const paidTypes = [
         text: 'Платно',
     },
 ] as const satisfies ListOption[];
+
+export const typeToPageName = {
+    create: 'Создание донации',
+    edit: 'Редактирование донации',
+    plan: 'Планирование донации',
+};

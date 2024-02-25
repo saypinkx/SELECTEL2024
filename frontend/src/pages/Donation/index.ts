@@ -1,1 +1,1 @@
-export * from './DonationViewModel';
+export * from './Donation';

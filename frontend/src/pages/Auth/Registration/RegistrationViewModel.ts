@@ -6,6 +6,9 @@ import { AuthService } from '../../../services';
 
 @Service({ transient: true })
 export class RegistrationViewModel extends ViewModel {
+    private regApi = Container.get(AccountCreationAndConfirmationApi);
+    private auth = Container.get(AuthService);
+
     @observable private userId: number | undefined;
     @observable step: 'chooseType' | 'enterData' | 'confirm' = 'chooseType';
     @observable name = '';
@@ -33,14 +36,9 @@ export class RegistrationViewModel extends ViewModel {
         ].some(Boolean);
     }
 
-    constructor(
-        private regApi: AccountCreationAndConfirmationApi,
-        private auth: AuthService,
-    ) {
+    constructor() {
         super();
         makeObservable(this);
-        this.regApi = Container.get(AccountCreationAndConfirmationApi);
-        this.auth = Container.get(AuthService);
     }
 
     @action onChangeName = (value: string) => {
@@ -82,6 +80,7 @@ export class RegistrationViewModel extends ViewModel {
                 phone: this.phone,
                 password: this.password,
             });
+
             if (user_id) {
                 runInAction(() => {
                     this.userId = Number(user_id);

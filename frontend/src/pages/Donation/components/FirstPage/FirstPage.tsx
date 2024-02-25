@@ -1,13 +1,12 @@
 import { view } from '@yoskutik/react-vvm';
 import { Button } from '@gravity-ui/uikit';
 import { useEffect } from 'react';
-import { donationTypes, paidTypes } from '../../constatns';
+import { donationTypes, paidTypes, typeToPageName } from '../../constatns';
 import { Calendar } from '@gravity-ui/date-components';
-import { runInAction } from 'mobx';
 import { dateTimeParse } from '@gravity-ui/date-utils';
 import { FirstPageViewModel } from './FirstPageViewModel';
 import styles from './FirstPage.module.scss';
-import { isTelegram } from '../../../../shared/lib';
+import { Page } from '../../../../shared/ui';
 
 export const FirstPage = view(FirstPageViewModel)(({ viewModel }) => {
     useEffect(() => {
@@ -24,20 +23,23 @@ export const FirstPage = view(FirstPageViewModel)(({ viewModel }) => {
     useEffect(() => {
         Telegram.WebApp.MainButton.isVisible = !viewModel.hasErrors;
     }, [viewModel.hasErrors]);
-    console.log(Telegram.WebApp.platform);
+
     return (
-        <div className={styles.container}>
-            <h2 className={styles.pageHeader}>Добавление донации</h2>
+        <Page title={typeToPageName[viewModel.parent.pageType]} cls={styles.container}>
             <div className={styles.block}>
                 <h3 className={styles.blockHeader}>Выберите тип донации</h3>
                 <div className={styles.tagsContainer}>
                     {donationTypes.map(({ type, text }) => (
                         <Button
-                            view={viewModel.donationType === type ? 'outlined-action' : 'outlined'}
+                            view={
+                                viewModel.parent.donationType === type
+                                    ? 'outlined-action'
+                                    : 'outlined'
+                            }
                             key={type}
                             size="xl"
                             className={styles.tag}
-                            onClick={() => viewModel.setDonationType(type)}
+                            onClick={() => viewModel.parent.setDonationType(type)}
                         >
                             {text}
                         </Button>
@@ -51,7 +53,7 @@ export const FirstPage = view(FirstPageViewModel)(({ viewModel }) => {
                     size="xl"
                     // @ts-expect-error баг в типизации либы
                     minValue={dateTimeParse('now')!}
-                    onUpdate={date => viewModel.setDate(date.toDate())}
+                    onUpdate={date => viewModel.parent.setDate(date.toDate())}
                 />
             </div>
 
@@ -61,9 +63,11 @@ export const FirstPage = view(FirstPageViewModel)(({ viewModel }) => {
                     {paidTypes.map(({ type, text }) => (
                         <Button
                             key={type}
-                            view={viewModel.paidType === type ? 'outlined-action' : 'outlined'}
+                            view={
+                                viewModel.parent.paidType === type ? 'outlined-action' : 'outlined'
+                            }
                             className={styles.tag}
-                            onClick={() => viewModel.setPaidType(type)}
+                            onClick={() => viewModel.parent.setPaidType(type)}
                             size="xl"
                         >
                             {text}
@@ -71,22 +75,6 @@ export const FirstPage = view(FirstPageViewModel)(({ viewModel }) => {
                     ))}
                 </div>
             </div>
-
-            {!isTelegram() && !viewModel.hasErrors && (
-                <Button
-                    view="action"
-                    pin="round-round"
-                    size="xl"
-                    width="max"
-                    onClick={() => {
-                        runInAction(() => {
-                            viewModel.parent.step = 'second';
-                        });
-                    }}
-                >
-                    Далее
-                </Button>
-            )}
-        </div>
+        </Page>
     );
 });
