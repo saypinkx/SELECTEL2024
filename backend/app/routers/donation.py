@@ -121,7 +121,7 @@ def update_donation(donation_id: Annotated[int, Path()], location: str, date: st
     if file:
         file_format = file.filename.split('.')[1]
         filename = 'r' + donation_db.certificate + '.' + file_format
-        filepath = f'./files/{filename}'
+        filepath = f'./app/files/{filename}'
 
         with open(filepath, 'wb') as f:
             content = file.file.read()
