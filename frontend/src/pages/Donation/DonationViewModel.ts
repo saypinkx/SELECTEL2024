@@ -5,6 +5,8 @@ import { type PlaceType, donationTypes } from './constatns';
 import { SelectOption } from '@gravity-ui/uikit';
 import { ApiApi, BloodStationInformationApi, RegionsApi } from '../../shared/api';
 import { AuthService } from '../../services';
+import { Donation } from './types';
+import { dateTimeParse } from '@gravity-ui/date-utils';
 
 export type DonationType = (typeof donationTypes)[number]['type'];
 export type PaidType = 'free' | 'paid';
@@ -38,25 +40,7 @@ export class DonationViewModel extends ViewModel {
         super();
         makeObservable(this);
 
-        this.loadOptions = true;
-        this.regionsApi
-            .countriesList({
-                ordering: 'title',
-                page_size: 1000,
-            })
-            .then(({ results = [] }) => {
-                runInAction(() => {
-                    this.countriesOptions = results.map(country => ({
-                        value: country.id.toString(),
-                        content: country.title,
-                    }));
-                });
-            })
-            .finally(() => {
-                runInAction(() => {
-                    this.loadOptions = false;
-                });
-            });
+        this.loadCountries();
     }
 
     @action goToFirstPage = () => {
@@ -83,18 +67,43 @@ export class DonationViewModel extends ViewModel {
         this.placeType = value;
     };
 
-    @action setCountry = (value: number) => {
+    @action loadCountries = async () => {
+        this.loadOptions = true;
+        return this.regionsApi
+            .countriesList({
+                ordering: 'title',
+                page_size: 1000,
+            })
+            .then(({ results = [] }) => {
+                runInAction(() => {
+                    this.countriesOptions = results.map(country => ({
+                        value: country.id.toString(),
+                        content: country.title,
+                    }));
+                });
+            })
+            .finally(() => {
+                runInAction(() => {
+                    this.loadOptions = false;
+                });
+            });
+    };
+
+    @action setCountry = async (value: number) => {
         this.country = value;
         this.region = -1;
         this.city = -1;
         this.address = -1;
+        return this.loadRegions(this.country);
+    };
 
+    @action loadRegions = async (country: number) => {
         this.loadOptions = true;
-        this.regionsApi
+        return this.regionsApi
             .regionsList({
                 ordering: 'title',
-                country: this.country,
-                page_size: 10000,
+                country,
+                page_size: 1000,
             })
             .then(({ results = [] }) => {
                 runInAction(() => {
@@ -111,18 +120,21 @@ export class DonationViewModel extends ViewModel {
             });
     };
 
-    @action setRegion = (value: number) => {
+    @action setRegion = async (value: number) => {
         this.region = value;
         this.city = -1;
         this.address = -1;
+        return this.loadCities(this.country, this.region);
+    };
 
+    @action loadCities = async (country: number, region: number) => {
         this.loadOptions = true;
-        this.regionsApi
+        return this.regionsApi
             .citiesList({
                 ordering: 'title',
-                country: this.country,
-                region: this.region,
-                page_size: 10000,
+                country,
+                region,
+                page_size: 1000,
             })
             .then(({ results = [] }) => {
                 runInAction(() => {
@@ -139,15 +151,19 @@ export class DonationViewModel extends ViewModel {
             });
     };
 
-    @action setCity = (value: number) => {
+    @action setCity = async (value: number) => {
         this.city = value;
         this.address = -1;
+        return this.loadAddresses(this.city);
+    };
+
+    @action loadAddresses = async (city: number) => {
         this.loadOptions = true;
-        this.stationsApi
+        return this.stationsApi
             .bloodStationsList({
                 ordering: 'title',
-                city_id: this.city,
-                page_size: 10000,
+                city_id: city,
+                page_size: 1000,
             })
             .then(({ results = [] }) => {
                 runInAction(() => {
@@ -173,10 +189,29 @@ export class DonationViewModel extends ViewModel {
     };
 
     @action loadDonationInfo = async (id: number) => {
-        // this.api.getUserDonationApiDonationsGet({ user_id: id }).then(data => {});
+        this.api.getDonationApiDonationsDonationIdGet(id).then((data: Donation) => {
+            this.donationType = data.type_donation;
+            this.date = dateTimeParse(data.date)?.toDate() ?? new Date();
+            this.paidType = data.type_price;
+            const location = JSON.parse(data.location);
+            this.country = location.country;
+            this.city = location.city;
+            this.region = location.region;
+            this.address = location.address || -1;
+            this.loadRegions(this.country);
+            this.loadCities(this.country, this.region);
+            this.loadAddresses(this.city);
+            this.placeType = data.is_stationary ? 'station' : 'mobile';
+        });
     };
 
-    @action saveDonation = () => {
+    onSave = () => {
+        if (this.pageType === 'create') return this.createDonation();
+        if (this.pageType === 'edit') this.editDonation('Донация изменена');
+        if (this.pageType === 'plan') this.editDonation('Донация запланирована');
+    };
+
+    createDonation = () => {
         this.api.createDonationApiDonationsPost(
             {
                 date: this.date!.toISOString(),
@@ -198,6 +233,32 @@ export class DonationViewModel extends ViewModel {
             },
         );
         Telegram.WebApp.showAlert('Донация добавлена', () => {
+            Telegram.WebApp.close();
+        });
+    };
+
+    editDonation = (message: string) => {
+        if (!this.id) return;
+        this.api.updateDonationApiDonationsDonationIdPut(
+            this.id,
+            {
+                date: this.date!.toISOString(),
+                is_stationary: this.placeType === 'station',
+                status: 'pending',
+                type_price: this.paidType!,
+                location: JSON.stringify({
+                    country: this.country,
+                    region: this.region,
+                    city: this.city,
+                    address: this.address,
+                }),
+                centre: this.address.toString(),
+            },
+            {
+                file: this.certificate,
+            },
+        );
+        Telegram.WebApp.showAlert(message, () => {
             Telegram.WebApp.close();
         });
     };

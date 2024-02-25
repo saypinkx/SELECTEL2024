@@ -4,7 +4,7 @@ import { DonationType } from './constatns';
 export type Donation = {
     id: number;
     type_price: PaidType;
-    location: { country: number; region: number; city: number; address: number };
+    location: string;
     certificate: string;
     status: 'pending' | 'planning';
     date: string;
