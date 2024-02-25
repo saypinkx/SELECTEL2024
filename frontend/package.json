@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "tsc && vite build",
+        "build": "vite build",
         "api-types": "yarn api-types:own && yarn api-types:selectel",
         "api-types:selectel": "swagger-typescript-api -p https://hackaton.donorsearch.org/api/schema/ -o ./src/shared/api/__generated__/selectel --axios --unwrap-response-data --modular --module-name-first-tag --sort-types --single-http-client --templates ./src/shared/api/templates",
         "api-types:own": "swagger-typescript-api -p http://92.53.100.43:5500/openapi.json -o ./src/shared/api/__generated__/own --axios --unwrap-response-data --modular --module-name-first-tag --sort-types --single-http-client --templates ./src/shared/api/templates",

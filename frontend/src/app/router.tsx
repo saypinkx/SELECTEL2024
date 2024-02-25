@@ -32,7 +32,7 @@ export const routes = createRoutesFromElements([
         element={
             <RequireAuth>
                 <Routes>
-                    <Route path="/donation/:type?/:id" element={<DonationPage />} />,
+                    <Route path="/donation/:type?/:id?" element={<DonationPage />} />,
                     <Route path="/donations/" element={<DonationsPage />} />,
                     <Route path="/profile/change-password" element={<ChangePassword />} />
                     <Route path="/bonus/:id" element={<BonusPage />} />,
