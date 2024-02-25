@@ -87,7 +87,7 @@ def create_donation(type_donation: str, location: str, date: str, is_stationary:
     if file:
         file_format = file.filename.split('.')[1]
         filename = str(uuid.uuid4()) + '.' + file_format
-        filepath = f'./files/{filename}'
+        filepath = f'./app/files/{filename}'
 
         with open(filepath, 'wb') as f:
             content = file.file.read()
@@ -106,7 +106,7 @@ def download_certificate(donation_id: int):
 
     if not donation_db:
         raise HTTPException(status_code=403, detail='donation with id not found')
-    return FileResponse(path=f'./files/{donation_db.certificate}', filename=donation_db.certificate,
+    return FileResponse(path=f'./app/files/{donation_db.certificate}', filename=donation_db.certificate,
                         media_type='multipart/form-data')
 
 
