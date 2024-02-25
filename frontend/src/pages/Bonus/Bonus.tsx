@@ -64,7 +64,7 @@ export const BonusPage = view(BonusPageViewModel)(({ viewModel }) => {
                                 <h2 className={styles.bonusName}>{viewModel.bonus.bonus_name}</h2>
                                 <p className={styles.bonusDate}>{`до ${dateTimeParse(
                                     viewModel.bonus.date_validity,
-                                )?.format('YYYY MMM DD')}`}</p>
+                                )?.format('DD MMM YYYY')}`}</p>
                             </div>
                         </div>
                         {viewModel.step === 'view' && (

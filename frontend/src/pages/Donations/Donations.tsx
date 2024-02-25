@@ -2,18 +2,17 @@ import { view } from '@yoskutik/react-vvm';
 import { DonationsViewModel } from './DonationsViewModel';
 import { Page } from '../../shared/ui';
 import styles from './Donations.module.scss';
-// import { useNavigate } from 'react-router';
+import { DonationCard } from './components';
 
-export const Donations = view(DonationsViewModel)(({ viewModel }) => {
-    // const navigate = useNavigate();
-
+export const DonationsPage = view(DonationsViewModel)(({ viewModel }) => {
     return (
-        <Page title="Мои донации">
-            {/* <DonorInfo /> */}
+        <Page title="Мои донации" cls={styles.content}>
             <div className={styles.donations}>
-                {viewModel.donations.map(() => (
-                    <div>карточка</div>
-                ))}
+                {viewModel.donations
+                    .filter(({ centre }) => centre !== '-1')
+                    .map(donation => (
+                        <DonationCard key={donation.id} donation={donation} />
+                    ))}
             </div>
         </Page>
     );
