@@ -3,7 +3,6 @@ import Container, { Service } from 'typedi';
 import { ViewModel } from '@yoskutik/react-vvm';
 import { AuthService, MetaUser, RouterService } from '../../../services';
 import { ApiApi, AuthenticationApi, isApiError } from '../../../shared/api';
-import { isTelegram } from '../../../shared/lib';
 
 @Service({ transient: true })
 export class LoginViewModel extends ViewModel {
@@ -81,14 +80,7 @@ export class LoginViewModel extends ViewModel {
 
             user.meta = await this.metaLogin();
             this.auth.setUserInfo(user);
-
-            if (isTelegram()) {
-                Telegram.WebApp.showAlert('Пользователь успешно авторизован', () => {
-                    Telegram.WebApp.close();
-                });
-            } else {
-                this.routes.router?.navigate('/profile');
-            }
+            this.routes.router?.navigate('/profile');
         } catch (error) {
             if (isApiError<'message'>(error)) {
                 this.loginError = error.response?.data.message ?? '';

@@ -6,8 +6,6 @@ import { SecondPageViewModel } from './SecondPageViewModel';
 import styles from './SecondPage.module.scss';
 import { EmptySearch } from './components';
 import { FileInput, Page } from '../../../../shared/ui';
-import { isTelegram } from '../../../../shared/lib';
-
 export const SecondPage = view(SecondPageViewModel)(({ viewModel }) => {
     useEffect(() => {
         Telegram.WebApp.MainButton.isVisible = !viewModel.hasErrors;
@@ -136,18 +134,6 @@ export const SecondPage = view(SecondPageViewModel)(({ viewModel }) => {
                         <p>Либо сделайте это позже</p>
                     </div>
                 </div>
-            )}
-
-            {!isTelegram() && !viewModel.hasErrors && (
-                <Button
-                    view="action"
-                    pin="round-round"
-                    size="xl"
-                    width="max"
-                    onClick={viewModel.parent.onSave}
-                >
-                    Далее
-                </Button>
             )}
         </Page>
     );

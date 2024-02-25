@@ -3,11 +3,9 @@ import { Button } from '@gravity-ui/uikit';
 import { useEffect } from 'react';
 import { donationTypes, paidTypes, typeToPageName } from '../../constatns';
 import { Calendar } from '@gravity-ui/date-components';
-import { runInAction } from 'mobx';
 import { dateTimeParse } from '@gravity-ui/date-utils';
 import { FirstPageViewModel } from './FirstPageViewModel';
 import styles from './FirstPage.module.scss';
-import { isTelegram } from '../../../../shared/lib';
 import { Page } from '../../../../shared/ui';
 
 export const FirstPage = view(FirstPageViewModel)(({ viewModel }) => {
@@ -77,22 +75,6 @@ export const FirstPage = view(FirstPageViewModel)(({ viewModel }) => {
                     ))}
                 </div>
             </div>
-
-            {!isTelegram() && !viewModel.hasErrors && (
-                <Button
-                    view="action"
-                    pin="round-round"
-                    size="xl"
-                    width="max"
-                    onClick={() => {
-                        runInAction(() => {
-                            viewModel.parent.step = 'second';
-                        });
-                    }}
-                >
-                    Далее
-                </Button>
-            )}
         </Page>
     );
 });
