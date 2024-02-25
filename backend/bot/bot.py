@@ -28,7 +28,6 @@ async def start(message: types.Message):
     website_url1 = 'https://shorturl.at/eprEL'
     url_help_project = 'https://donorsearch.org/donate/'
 
-
     keyboard = types.InlineKeyboardMarkup()
     handler_button0 = types.InlineKeyboardButton(text='🩸Мои донации', callback_data='my_donations')
     handler_button1 = types.InlineKeyboardButton(text='📌Cдать кровь', callback_data='donate_blood')
@@ -94,7 +93,7 @@ async def magazine_and_events(callback: types.CallbackQuery):
     url_states = 'https://journal.donorsearch.org/?utm_source=header&utm_medium=ds&utm_campaign=donor_search'
     url_projects = 'https://unity.donorsearch.org/'
     keyboard = types.InlineKeyboardMarkup()
-    handler_button0 = types.InlineKeyboardButton(text='🎮Игры', callback_data='null')
+    handler_button0 = types.InlineKeyboardButton(text='🎮Игры', callback_data='games')
     handler_button1 = types.InlineKeyboardButton(text='📄Статьи', web_app=WebAppInfo(url=url_states))
     handler_button2 = types.InlineKeyboardButton(text='⭐️️Спецпроекты', web_app=WebAppInfo(url=url_projects))
 
@@ -126,7 +125,7 @@ async def profile(callback: types.CallbackQuery):
         f'Зарегистрируйтесь в DonorSearch или проверьте свой статус Почетного донора. Узнайте о бонусах для доноров и посмотрите топ-100 доноров.')
     website_url1 = 'https://shorturl.at/eprEL'
     url_signin = 'https://shorturl.at/ioz18'
-    url_bonus ='https://shorturl.at/fAPRT'
+    url_bonus = 'https://shorturl.at/fAPRT'
     url0 = 'https://shorturl.at/fJY15'
 
     keyboard = types.InlineKeyboardMarkup()
@@ -139,6 +138,25 @@ async def profile(callback: types.CallbackQuery):
     keyboard.row(handler_button0)
     keyboard.row(handler_button1)
     keyboard.row(handler_button2, handler_button3)
+    await callback.message.answer(text=text, reply_markup=keyboard)
+
+
+@dp.callback_query_handler(text='games')
+async def games(callback: types.CallbackQuery):
+    text = (
+        f'Зарегистрируйтесь в DonorSearch или проверьте свой статус Почетного донора. Узнайте о бонусах для доноров и посмотрите топ-100 доноров.')
+    url_flappy = 'https://flappybird.io/'
+    url_2048 = 'https://4ark.me/2048/'
+    url_pacman = 'https://masonicgit.github.io/pacman/'
+
+    keyboard = types.InlineKeyboardMarkup()
+    handler_button0 = types.InlineKeyboardButton(text='FlappyBird', web_app=WebAppInfo(url=url_flappy))
+    handler_button1 = types.InlineKeyboardButton(text='2048', web_app=WebAppInfo(url=url_2048))
+    handler_button2 = types.InlineKeyboardButton(text='pacman', web_app=WebAppInfo(url=url_pacman))
+
+    keyboard.row(handler_button0, handler_button1, handler_button2)
+
+
     await callback.message.answer(text=text, reply_markup=keyboard)
 
 
