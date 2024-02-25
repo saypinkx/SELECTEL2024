@@ -133,3 +133,12 @@ def update_donation(donation_id: Annotated[int, Path()], location: str, date: st
     db.add(donation_db)
     db.commit()
     return {"message": f"Successfully update donation"}
+
+
+@router.get("/{donation_id}")
+def get_donation(donation_id: Annotated[int, Path()]):
+    db = db_session()
+    donation_db = db.query(Donation).get(donation_id)
+    if not donation_db:
+        raise HTTPException(status_code=403, detail='donation with id not found')
+    return donation_db
