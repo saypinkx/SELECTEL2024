@@ -25,6 +25,7 @@ const RequireAuth = childView<AppViewModel>()<{ children: JSX.Element }>(({
 });
 
 export const routes = createRoutesFromElements([
+    <Route path="/top" element={<TopPage />} />,
     <Route path="/auth" element={<AuthPage />} />,
     <Route
         index
@@ -37,7 +38,6 @@ export const routes = createRoutesFromElements([
                     <Route path="/profile/change-password" element={<ChangePassword />} />
                     <Route path="/bonus/:id" element={<BonusPage />} />,
                     <Route path="/bonus" element={<BonusesPage />} />,
-                    <Route path="/top" element={<TopPage />} />,
                     <Route path="/*" element={<ProfilePage />} />
                 </Routes>
             </RequireAuth>
