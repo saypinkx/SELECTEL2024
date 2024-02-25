@@ -229,7 +229,7 @@ export class DonationViewModel extends ViewModel {
                 centre: this.address.toString(),
             },
             {
-                file: this.certificate,
+                file: this.certificate ?? ('' as unknown as File),
             },
         );
         Telegram.WebApp.showAlert('Донация добавлена', () => {
