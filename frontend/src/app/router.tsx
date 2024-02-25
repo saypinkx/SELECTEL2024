@@ -25,7 +25,7 @@ export const routes = createRoutesFromElements([
         element={
             <RequireAuth>
                 <Routes>
-                    <Route path="/donation" element={<DonationPage />} />,
+                    <Route path="/donation/:type?/:id" element={<DonationPage />} />,
                     <Route path="/profile/change-password" element={<ChangePassword />} />
                     <Route path="/bonus/:id" element={<BonusPage />} />,
                     <Route path="/bonus" element={<BonusesPage />} />,

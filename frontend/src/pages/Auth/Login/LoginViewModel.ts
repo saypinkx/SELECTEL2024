@@ -1,12 +1,17 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import Container, { Service } from 'typedi';
 import { ViewModel } from '@yoskutik/react-vvm';
-import { AuthService, RouterService } from '../../../services';
-import { AuthenticationApi, isApiError } from '../../../shared/api';
+import { AuthService, MetaUser, RouterService } from '../../../services';
+import { ApiApi, AuthenticationApi, isApiError } from '../../../shared/api';
 import { isTelegram } from '../../../shared/lib';
 
 @Service({ transient: true })
 export class LoginViewModel extends ViewModel {
+    private api = Container.get(ApiApi);
+    private auth = Container.get(AuthService);
+    private authApi = Container.get(AuthenticationApi);
+    private routes = Container.get(RouterService);
+
     @observable login = '';
     @observable password = '';
 
@@ -19,16 +24,9 @@ export class LoginViewModel extends ViewModel {
         return [this.loginError, this.passwordError].some(Boolean);
     }
 
-    constructor(
-        private auth: AuthService,
-        private authApi: AuthenticationApi,
-        private routes: RouterService,
-    ) {
+    constructor() {
         super();
         makeObservable(this);
-        this.auth = Container.get(AuthService);
-        this.authApi = Container.get(AuthenticationApi);
-        this.routes = Container.get(RouterService);
     }
 
     @action onChangeLogin = (value: string) => {
@@ -43,22 +41,53 @@ export class LoginViewModel extends ViewModel {
         this.passwordError = '';
     };
 
+    @action metaLogin = async (): Promise<MetaUser['meta'] | undefined> => {
+        return this.api
+            .loginApiUsersLoginPost({
+                firstname: this.login,
+                password: this.password,
+            })
+            .then((id: number) => this.api.getUserApiUsersUserIdGet(id))
+            .catch(() => {
+                this.api
+                    .createUserApiUsersPost({
+                        email: '',
+                        password: this.password,
+                        firstname: this.login,
+                        lastname: '',
+                        patronym: '',
+                        tag: '',
+                    })
+                    .then(() =>
+                        this.api.loginApiUsersLoginPost({
+                            firstname: this.login,
+                            password: this.password,
+                        }),
+                    )
+                    .then((id: number) => this.api.getUserApiUsersUserIdGet(id))
+                    .catch(() => {
+                        return undefined;
+                    });
+            });
+    };
+
     @action onLogin = async () => {
         this.isLoading = true;
         try {
-            const user = await this.authApi.authLoginCreate({
+            const user: MetaUser = await this.authApi.authLoginCreate({
                 username: this.login,
                 password: this.password,
             });
+
+            user.meta = await this.metaLogin();
             this.auth.setUserInfo(user);
 
             if (isTelegram()) {
-                console.log('asdasd');
                 Telegram.WebApp.showAlert('Пользователь успешно авторизован', () => {
                     Telegram.WebApp.close();
                 });
             } else {
-                this.routes.router.navigate('/profile');
+                this.routes.router?.navigate('/profile');
             }
         } catch (error) {
             if (isApiError<'message'>(error)) {

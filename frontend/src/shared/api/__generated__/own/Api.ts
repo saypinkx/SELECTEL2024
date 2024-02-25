@@ -15,12 +15,12 @@ import {
   BodyUpdateDonationApiDonationsDonationIdPut,
   HTTPValidationError,
 } from "./data-contracts";
-import { ContentType, HttpClient, RequestParams } from "./http-client";
+import { ContentType, HttpClient2, RequestParams } from "./http-client";
 
 @Service()
 export class ApiApi<SecurityDataType = unknown> {
-  constructor(public http: HttpClient<SecurityDataType>) {
-    this.http = Container.get(HttpClient) as HttpClient<SecurityDataType>;
+  constructor(public http: HttpClient2<SecurityDataType>) {
+    this.http = Container.get(HttpClient2) as HttpClient2<SecurityDataType>;
   }
 
   /**

@@ -6,6 +6,7 @@ import { SecondPageViewModel } from './SecondPageViewModel';
 import styles from './SecondPage.module.scss';
 import { EmptySearch } from './components';
 import { FileInput } from '../../../../shared/ui';
+import { isTelegram } from '../../../../shared/lib';
 
 export const SecondPage = view(SecondPageViewModel)(({ viewModel }) => {
     useEffect(() => {
@@ -20,11 +21,11 @@ export const SecondPage = view(SecondPageViewModel)(({ viewModel }) => {
             is_visible: false,
         });
         Telegram.WebApp.BackButton.isVisible = true;
-        Telegram.WebApp.onEvent('mainButtonClicked', viewModel.saveDonation);
+        Telegram.WebApp.onEvent('mainButtonClicked', viewModel.parent.saveDonation);
         Telegram.WebApp.onEvent('backButtonClicked', viewModel.parent.goToFirstPage);
         return () => {
             Telegram.WebApp.BackButton.isVisible = false;
-            Telegram.WebApp.offEvent('mainButtonClicked', viewModel.saveDonation);
+            Telegram.WebApp.offEvent('mainButtonClicked', viewModel.parent.saveDonation);
             Telegram.WebApp.offEvent('backButtonClicked', viewModel.parent.goToFirstPage);
         };
     }, [viewModel]);
@@ -37,11 +38,13 @@ export const SecondPage = view(SecondPageViewModel)(({ viewModel }) => {
                 <div className={styles.tagsContainer}>
                     {placeTypes.map(({ type, text }) => (
                         <Button
-                            view={viewModel.placeType === type ? 'outlined-action' : 'outlined'}
+                            view={
+                                viewModel.parent.placeType === type ? 'outlined-action' : 'outlined'
+                            }
                             key={type}
                             size="xl"
                             className={styles.tag}
-                            onClick={() => viewModel.setPlaceType(type)}
+                            onClick={() => viewModel.parent.setPlaceType(type)}
                         >
                             {text}
                         </Button>
@@ -54,48 +57,64 @@ export const SecondPage = view(SecondPageViewModel)(({ viewModel }) => {
                 <div className={styles.location}>
                     <Select
                         placeholder="Страна"
-                        value={viewModel.country === -1 ? [] : [viewModel.country.toString()]}
-                        onUpdate={values => viewModel.setCountry(+values[0])}
-                        options={viewModel.countriesOptions}
-                        disabled={viewModel.loadOptions}
-                        loading={viewModel.loadOptions}
+                        value={
+                            viewModel.parent.country === -1
+                                ? []
+                                : [viewModel.parent.country.toString()]
+                        }
+                        onUpdate={values => viewModel.parent.setCountry(+values[0])}
+                        options={viewModel.parent.countriesOptions}
+                        disabled={viewModel.parent.loadOptions}
+                        loading={viewModel.parent.loadOptions}
                         renderEmptyOptions={EmptySearch}
                         filterable
                         size="xl"
                     />
                     <Select
                         placeholder="Область"
-                        value={viewModel.region === -1 ? [] : [viewModel.region.toString()]}
-                        disabled={viewModel.country === -1}
-                        onUpdate={values => viewModel.setRegion(+values[0])}
-                        options={viewModel.regionsOptions}
-                        loading={viewModel.loadOptions}
+                        value={
+                            viewModel.parent.region === -1
+                                ? []
+                                : [viewModel.parent.region.toString()]
+                        }
+                        disabled={viewModel.parent.country === -1}
+                        onUpdate={values => viewModel.parent.setRegion(+values[0])}
+                        options={viewModel.parent.regionsOptions}
+                        loading={viewModel.parent.loadOptions}
                         renderEmptyOptions={EmptySearch}
                         filterable
                         size="xl"
                     />
                     <Select
                         placeholder="Город"
-                        value={viewModel.city === -1 ? [] : [viewModel.city.toString()]}
-                        disabled={viewModel.region === -1}
-                        onUpdate={values => viewModel.setCity(+values[0])}
-                        options={viewModel.citiesOptions}
-                        loading={viewModel.loadOptions}
+                        value={
+                            viewModel.parent.city === -1 ? [] : [viewModel.parent.city.toString()]
+                        }
+                        disabled={viewModel.parent.region === -1}
+                        onUpdate={values => viewModel.parent.setCity(+values[0])}
+                        options={viewModel.parent.citiesOptions}
+                        loading={viewModel.parent.loadOptions}
                         renderEmptyOptions={EmptySearch}
                         filterable
                         size="xl"
                     />
-                    <Select
-                        placeholder="Адрес центра"
-                        value={viewModel.address === -1 ? [] : [viewModel.address.toString()]}
-                        disabled={viewModel.city === -1}
-                        onUpdate={values => viewModel.setAddress(+values[0])}
-                        options={viewModel.addressesOptions}
-                        loading={viewModel.loadOptions}
-                        renderEmptyOptions={EmptySearch}
-                        filterable
-                        size="xl"
-                    />
+                    {viewModel.parent.placeType === 'station' && (
+                        <Select
+                            placeholder="Адрес центра"
+                            value={
+                                viewModel.parent.address === -1
+                                    ? []
+                                    : [viewModel.parent.address.toString()]
+                            }
+                            disabled={viewModel.parent.city === -1}
+                            onUpdate={values => viewModel.parent.setAddress(+values[0])}
+                            options={viewModel.parent.addressesOptions}
+                            loading={viewModel.parent.loadOptions}
+                            renderEmptyOptions={EmptySearch}
+                            filterable
+                            size="xl"
+                        />
+                    )}
                 </div>
             </div>
 
@@ -106,9 +125,29 @@ export const SecondPage = view(SecondPageViewModel)(({ viewModel }) => {
                     size="xl"
                     width="max"
                     view="outlined"
-                    onUpdate={viewModel.uploadCertificate}
+                    onUpdate={viewModel.parent.uploadCertificate}
                 />
+                <div className={styles.certHint}>
+                    <p>
+                        Принимаются только фото официальных справок о сдаче крови от центров крови
+                        соответствующей страны. Необходимо для верификации совершенной донации,
+                        чтобы учитывать в уровнях и бонусной программе
+                    </p>
+                    <p>Либо сделайте это позже</p>
+                </div>
             </div>
+
+            {!isTelegram() && !viewModel.hasErrors && (
+                <Button
+                    view="action"
+                    pin="round-round"
+                    size="xl"
+                    width="max"
+                    onClick={viewModel.parent.saveDonation}
+                >
+                    Далее
+                </Button>
+            )}
         </div>
     );
 });
